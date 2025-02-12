@@ -1,11 +1,11 @@
 import 'package:ebony_market_app/app/core/utils/extension/sizedbox_extension.dart';
 import 'package:ebony_market_app/app/core/utils/widgets/textfields/input_primary.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import '../../../core/constant/constant.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 import 'components/home_app_bar.dart';
 import 'components/home_carousel.dart';
@@ -27,6 +27,7 @@ class HomeView extends GetView<HomeController> {
                   HomeCarousel(),
                   10.s,
                   InputPrimary(
+                    onTap: () => Get.toNamed(Routes.SEARCH),
                     hint: 'Search here',
                     suffixIcon: HeroIcon(
                       HeroIcons.magnifyingGlass,

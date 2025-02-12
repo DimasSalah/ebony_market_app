@@ -2,8 +2,12 @@ import 'package:get/get.dart';
 
 import '../modules/bottombar/bindings/bottombar_binding.dart';
 import '../modules/bottombar/views/bottombar_view.dart';
+import '../modules/events/bindings/events_binding.dart';
+import '../modules/events/views/events_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/search/bindings/search_binding.dart';
+import '../modules/search/views/search_view.dart';
 
 part 'app_routes.dart';
 
@@ -22,6 +26,16 @@ class AppPages {
       name: _Paths.BOTTOMBAR,
       page: () => const BottombarView(),
       binding: BottombarBinding(),
+    ),
+    GetPage(
+      name: _Paths.SEARCH,
+      page: () => const SearchView(),
+      binding: SearchBinding(),
+    ),
+    GetPage(
+      name: _Paths.EVENTS,
+      page: () => const EventsView(),
+      binding: EventsBinding(),
     ),
   ];
 }
