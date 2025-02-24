@@ -53,7 +53,7 @@ class HomeView extends GetView<HomeController> {
                       Text(
                         'See All',
                         style: Poppins.regular.copyWith(
-                          fontSize: 13,
+                          fontSize: Tz.small,
                         ),
                       ),
                     ],
@@ -90,7 +90,7 @@ class HomeView extends GetView<HomeController> {
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12),
+                          style: TextStyle(fontSize: Tz.small),
                         ),
                       ],
                     ),

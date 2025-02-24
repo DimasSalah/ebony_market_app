@@ -18,18 +18,41 @@ class HomeCarousel extends StatelessWidget {
           itemCount: controller.banners.length,
           options: CarouselOptions(
             height: 150,
+            aspectRatio: 16 / 9,
             viewportFraction: 0.8,
-            enlargeCenterPage: true,
+            enlargeCenterPage: false,
+            autoPlay: true,
             onPageChanged: (index, reason) {
               controller.currentBannerIndex.value = index;
             },
           ),
           itemBuilder: (context, index, realIndex) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                controller.banners[index],
-                fit: BoxFit.cover,
+            return GestureDetector(
+              onLongPress: () {
+                Get.dialog(
+                  Dialog(
+                    backgroundColor: Colors.transparent,
+                    child: InteractiveViewer(
+                      minScale: 0.5,
+                      maxScale: 4.0,
+                      child: Image.asset(
+                        controller.banners[index],
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    controller.banners[index],
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             );
           },
