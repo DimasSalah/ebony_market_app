@@ -3,7 +3,10 @@ import 'package:get/get.dart';
 import '../modules/bottombar/bindings/bottombar_binding.dart';
 import '../modules/bottombar/views/bottombar_view.dart';
 import '../modules/events/bindings/events_binding.dart';
+import '../modules/events/views/events_details_view.dart';
 import '../modules/events/views/events_view.dart';
+import '../modules/feeds/bindings/feeds_binding.dart';
+import '../modules/feeds/views/feeds_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/search/bindings/search_binding.dart';
@@ -36,6 +39,16 @@ class AppPages {
       name: _Paths.EVENTS,
       page: () => const EventsView(),
       binding: EventsBinding(),
+    ),
+    GetPage(
+      name: _Paths.EVENT_DETAILS,
+      page: () => EventsDetailsView(),
+      binding: EventsBinding(),
+    ),
+    GetPage(
+      name: _Paths.FEEDS,
+      page: () => const FeedsView(),
+      binding: FeedsBinding(),
     ),
   ];
 }
