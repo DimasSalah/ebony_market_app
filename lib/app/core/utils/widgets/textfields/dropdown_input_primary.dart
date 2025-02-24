@@ -140,13 +140,13 @@ class _DropdownInputPrimary extends State<DropdownInputPrimary> {
                   Text(
                     widget.label,
                     style: widget.labelTextStyle ??
-                        Poppins.medium.copyWith(fontSize: 12),
+                        Poppins.medium.copyWith(fontSize: Tz.small),
                   ),
                 if (widget.isRequired)
                   Text(
                     '*',
                     style: Poppins.medium.copyWith(
-                      fontSize: 12,
+                      fontSize: Tz.small,
                       color: GColors.error,
                     ),
                   ),
@@ -169,7 +169,7 @@ class _DropdownInputPrimary extends State<DropdownInputPrimary> {
             icon: HeroIcon(
               HeroIcons.chevronDown,
               color: GColors.textPrimary,
-              size: widget.iconSize ,
+              size: widget.iconSize,
             ),
             value: widget.value,
             items: widget.items,

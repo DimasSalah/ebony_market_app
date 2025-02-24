@@ -2,7 +2,10 @@ import 'package:ebony_market_app/app/core/constant/constant.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 
+import '../../events/views/events_view.dart';
+import '../../feeds/views/feeds_view.dart';
 import '../../home/views/home_view.dart';
 import '../controllers/bottombar_controller.dart';
 
@@ -15,15 +18,11 @@ class BottombarView extends GetView<BottombarController> {
         controller: controller.tabController,
         children: [
           HomeView(),
-          Container(
-            color: Colors.red,
-          ),
+          FeedsView(),
           Container(
             color: Colors.blue,
           ),
-          Container(
-            color: Colors.green,
-          ),
+          EventsView(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -50,28 +49,28 @@ class BottombarView extends GetView<BottombarController> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildTabItem(
-                icon: Icons.home,
+                icon: HeroIcons.home,
                 index: 0,
                 isSelected: controller.currentIndex.value == 0,
                 title: 'Home',
               ),
               _buildTabItem(
-                icon: Icons.event,
+                icon: HeroIcons.rectangleStack,
                 index: 1,
                 isSelected: controller.currentIndex.value == 1,
-                title: 'Event',
+                title: 'Feeds',
               ),
               _buildTabItem(
-                icon: Icons.notifications,
+                icon: HeroIcons.bell,
                 index: 2,
                 isSelected: controller.currentIndex.value == 2,
                 title: 'Notification',
               ),
               _buildTabItem(
-                icon: Icons.person,
+                icon: HeroIcons.calendarDays,
                 index: 3,
                 isSelected: controller.currentIndex.value == 3,
-                title: 'Profile',
+                title: 'Evens',
               ),
             ],
           ),
@@ -81,7 +80,7 @@ class BottombarView extends GetView<BottombarController> {
   }
 
   Widget _buildTabItem({
-    required IconData icon,
+    required HeroIcons icon,
     required int index,
     required bool isSelected,
     required String title,
@@ -94,14 +93,15 @@ class BottombarView extends GetView<BottombarController> {
           decoration: isSelected
               ? BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.orange,
+                  color: GColors.primary,
                 )
               : null,
           child: GestureDetector(
             onTap: () => controller.selectMenu(index),
-            child: Icon(
+            child: HeroIcon(
               icon,
               color: isSelected ? Colors.white : Colors.grey,
+              style: HeroIconStyle.solid,
             ),
           ),
         ),

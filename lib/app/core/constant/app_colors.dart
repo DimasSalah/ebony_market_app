@@ -2,8 +2,12 @@ part of 'constant.dart';
 
 class GColors {
   // App theme colors
-  static const Color primary = Color(0xFFF28404);
-  static const Color secondary = Color(0xFF236DD1);
+  static const Color primary = Color(0xFFDD4B1F);
+
+  static const Color deepBrown = Color(0xFF2C1810);
+  static const Color earthGold = Color(0xFFC4A484);
+  static const Color warmCream = Color(0xFFF5E6D3);
+  static const Color successGreen = Color(0xFF2D5A27);
 
   // Text colors
   static const Color textPrimary = Color(0xFF333333);
@@ -11,7 +15,6 @@ class GColors {
   static const Color textWhite = Colors.white;
   static const Color textGrey = Color(0xFF847E7E);
   static const Color textOrangeGrey = Color(0xFFB99368);
-
 
   // Background colors
   static const Color light = Color(0xFFF6F6F6);

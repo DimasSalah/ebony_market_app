@@ -19,6 +19,7 @@ class GAppTheme {
       onSurface: GColors.black,
     ),
     useMaterial3: true,
+    
     fontFamily: GoogleFonts.poppins().fontFamily,
     disabledColor: GColors.grey,
     brightness: Brightness.light,
@@ -34,8 +35,9 @@ class GAppTheme {
       headerForegroundColor: GColors.white,
       dayOverlayColor:
           WidgetStateProperty.all(GColors.primary.withValues(alpha: 0.3)),
-      todayBackgroundColor: WidgetStateProperty.all(GColors.primary),
-      todayForegroundColor: WidgetStateProperty.all(GColors.white),
+      todayBackgroundColor: WidgetStateProperty.all(Colors.transparent),
+      todayForegroundColor: WidgetStateProperty.all(GColors.primary),
+      todayBorder: BorderSide(color: GColors.primary, width: 1),
     ),
     timePickerTheme: TimePickerThemeData(
       backgroundColor: GColors.white,

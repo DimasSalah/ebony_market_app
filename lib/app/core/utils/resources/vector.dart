@@ -1,5 +1,5 @@
 part of 'resources.dart';
 
-class Icons {
-  Icons._();
+class Vector {
+  Vector._();
 }
