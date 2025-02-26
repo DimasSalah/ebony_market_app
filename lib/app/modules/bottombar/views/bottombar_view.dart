@@ -7,6 +7,7 @@ import 'package:heroicons/heroicons.dart';
 import '../../events/views/events_view.dart';
 import '../../feeds/views/feeds_view.dart';
 import '../../home/views/home_view.dart';
+import '../../notification/views/notification_view.dart';
 import '../controllers/bottombar_controller.dart';
 
 class BottombarView extends GetView<BottombarController> {
@@ -19,9 +20,7 @@ class BottombarView extends GetView<BottombarController> {
         children: [
           HomeView(),
           FeedsView(),
-          Container(
-            color: Colors.blue,
-          ),
+          NotificationView(),
           EventsView(),
         ],
       ),

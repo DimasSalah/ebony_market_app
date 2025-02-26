@@ -9,6 +9,8 @@ import '../modules/feeds/bindings/feeds_binding.dart';
 import '../modules/feeds/views/feeds_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/notification/bindings/notification_binding.dart';
+import '../modules/notification/views/notification_view.dart';
 import '../modules/search/bindings/search_binding.dart';
 import '../modules/search/views/search_view.dart';
 
@@ -49,6 +51,11 @@ class AppPages {
       name: _Paths.FEEDS,
       page: () => const FeedsView(),
       binding: FeedsBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATION,
+      page: () => const NotificationView(),
+      binding: NotificationBinding(),
     ),
   ];
 }
