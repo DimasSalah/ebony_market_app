@@ -16,13 +16,10 @@ class EventsView extends GetView<EventsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: GColors.primary,
+        backgroundColor: GColors.backgroundColor,
         title: Text(
           'Events',
-          style: Poppins.semiBold.copyWith(
-            fontSize: 18,
-            color: GColors.white,
-          ),
+          style: Poppins.semiBold.copyWith(fontSize: 18),
         ),
         centerTitle: true,
       ),

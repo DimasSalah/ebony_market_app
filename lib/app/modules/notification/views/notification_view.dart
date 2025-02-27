@@ -13,72 +13,103 @@ class NotificationView extends GetView<NotificationController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
         backgroundColor: GColors.backgroundColor,
-        title: Text(
-          'Notifications',
-          style: Poppins.semiBold.copyWith(fontSize: 18),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Handle mark all as read
-              controller.markAllAsRead();
-            },
-            icon: HeroIcon(
-              HeroIcons.checkCircle,
-              color: GColors.primary,
-            ),
+        appBar: AppBar(
+          backgroundColor: GColors.backgroundColor,
+          title: Text(
+            'Notifications',
+            style: Poppins.semiBold.copyWith(fontSize: 18),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Today',
-                style: Poppins.semiBold.copyWith(
-                  fontSize: Tz.medium,
-                  color: GColors.textSecondary,
-                ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () => controller.markAllAsRead(),
+              icon: HeroIcon(
+                HeroIcons.checkCircle,
+                color: GColors.primary,
               ),
-              10.s,
-              // Today's Notifications
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.todayNotifications.length,
-                itemBuilder: (context, index) {
-                  final notification = controller.todayNotifications[index];
-                  return _buildNotificationItem(notification);
-                },
-              ),
-              20.s,
-              Text(
-                'This Week',
-                style: Poppins.semiBold.copyWith(
-                  fontSize: Tz.medium,
-                  color: GColors.textSecondary,
-                ),
-              ),
-              10.s,
-              // This Week's Notifications
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.weekNotifications.length,
-                itemBuilder: (context, index) {
-                  final notification = controller.weekNotifications[index];
-                  return _buildNotificationItem(notification);
-                },
-              ),
+            ),
+          ],
+          bottom: TabBar(
+            labelStyle: Poppins.medium,
+            unselectedLabelStyle: Poppins.regular,
+            labelColor: GColors.primary,
+            unselectedLabelColor: GColors.textSecondary,
+            indicatorColor: GColors.primary,
+            tabs: [
+              Tab(text: 'Social'),
+              Tab(text: 'System'),
             ],
           ),
+        ),
+        body: TabBarView(
+          children: [
+            // Social Notifications Tab
+            _buildNotificationList(isSocial: true),
+            // System Notifications Tab
+            _buildNotificationList(isSocial: false),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationList({required bool isSocial}) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Today',
+              style: Poppins.semiBold.copyWith(
+                fontSize: Tz.medium,
+                color: GColors.textSecondary,
+              ),
+            ),
+            10.s,
+            // Today's Notifications
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: isSocial
+                  ? controller.todaySocialNotifications.length
+                  : controller.todaySystemNotifications.length,
+              itemBuilder: (context, index) {
+                final notification = isSocial
+                    ? controller.todaySocialNotifications[index]
+                    : controller.todaySystemNotifications[index];
+                return _buildNotificationItem(notification);
+              },
+            ),
+            20.s,
+            Text(
+              'This Week',
+              style: Poppins.semiBold.copyWith(
+                fontSize: Tz.medium,
+                color: GColors.textSecondary,
+              ),
+            ),
+            10.s,
+            // This Week's Notifications
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: isSocial
+                  ? controller.weekSocialNotifications.length
+                  : controller.weekSystemNotifications.length,
+              itemBuilder: (context, index) {
+                final notification = isSocial
+                    ? controller.weekSocialNotifications[index]
+                    : controller.weekSystemNotifications[index];
+                return _buildNotificationItem(notification);
+              },
+            ),
+          ],
         ),
       ),
     );

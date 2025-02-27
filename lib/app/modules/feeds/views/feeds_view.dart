@@ -16,65 +16,65 @@ class FeedsView extends GetView<FeedsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              10.s,
-              Text(
-                'Feeds',
-                style: Poppins.medium.copyWith(fontSize: Tz.xlarge),
-              ),
-              10.s,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            'https://img.freepik.com/free-photo/close-up-portrait-curly-handsome-european-male_176532-8133.jpg?t=st=1740211208~exp=1740214808~hmac=df3e53da277aa86d50450b971d9f1be7e52698a1e7177d59abc139b8889d2f63&w=2000',
-                          ),
+      appBar: AppBar(
+        backgroundColor: GColors.backgroundColor,
+        title: Text(
+          'Feeds',
+          style: Poppins.semiBold.copyWith(fontSize: 18),
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 45,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          'https://img.freepik.com/free-photo/close-up-portrait-curly-handsome-european-male_176532-8133.jpg?t=st=1740211208~exp=1740214808~hmac=df3e53da277aa86d50450b971d9f1be7e52698a1e7177d59abc139b8889d2f63&w=2000',
                         ),
                       ),
                     ),
-                    15.s,
-                    Text(
-                      'What on your mind?',
-                      style: Poppins.medium.copyWith(
-                          fontSize: Tz.medium, color: GColors.textSecondary),
+                  ),
+                  15.s,
+                  Text(
+                    'What on your mind?',
+                    style: Poppins.medium.copyWith(
+                        fontSize: Tz.medium, color: GColors.textSecondary),
+                  ),
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () => Get.to(() => FeedsUploadView()),
+                    child: HeroIcon(
+                      HeroIcons.plus,
+                      size: 26,
                     ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: () => Get.to(() => FeedsUploadView()),
-                      child: HeroIcon(
-                        HeroIcons.plus,
-                        size: 26,
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-              Divider(
-                color: GColors.borderSecondary,
-                thickness: 3,
+            ),
+            Divider(
+              color: GColors.borderSecondary,
+              thickness: 3,
+            ),
+            10.s,
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: controller.imagesFeeds.length,
+              itemBuilder: (context, index) => FeedsCard(
+                image: controller.imagesFeeds[index],
               ),
-              10.s,
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: controller.imagesFeeds.length,
-                itemBuilder: (context, index) => FeedsCard(
-                  image: controller.imagesFeeds[index],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
