@@ -1,0 +1,120 @@
+{
+    "Restaurant": [
+      "African Restaurant",
+      "Caribbean Restaurant",
+      "Seafood Restaurant",
+      "Dessert cafe & beverages",
+      "Black owned franchise",
+      "Catering"
+    ],
+    "Retail": [
+      "Grocery Stores",
+      "Home & decor",
+      "Online stores and Accessories"
+    ],
+    "Fashion Brands": [
+      "Women fashion",
+      "Men fashion",
+      "Accessories",
+      "Unisex"
+    ],
+    "Beauty, Barbers & Spa": [
+      "Barbers & hair salons",
+      "Make up artist & cosmetics",
+      "Lash techs & nail aestheticians",
+      "Skin care & beauty stores",
+      "Spas & body sculpt treatments",
+      "Tattoo & piercings"
+    ],
+    "Professional Services": [
+      "Media Services, Photography & videography",
+      "Marketing",
+      "Technical Writers & resume services",
+      "Business Consultants",
+      "Graphic Designer",
+      "Travel agents",
+      "Veterinarians"
+    ],
+    "Health & Fitness": [
+      "Gyms & fitness classes",
+      "Doctors & health Clinics",
+      "Midwife",
+      "Dentist",
+      "Nutritionist & herbalists",
+      "Therapists",
+      "Dermatologist",
+      "Massage Therapist",
+      "Coaches",
+      "Sport Leagues",
+      "Herbalist"
+    ],
+    "Arts": [
+      "Painters & Drawings",
+      "Art Classes",
+      "Dancing Classes & performing arts",
+      "Musician",
+      "Film Makers & Screen play actors",
+      "Music Teacher"
+    ],
+    "Education": [
+      "Teachers & tutoring",
+      "Books & literature"
+    ],
+    "Real Estate": [
+      "Realtors",
+      "Real estate lawyers",
+      "Mortgage brokers",
+      "Property management",
+      "Home staging"
+    ],
+    "Community Groups": [
+      "Churches",
+      "Non profit organization",
+      "Youth & family services"
+    ],
+    "Labour & Trade Services": [
+      "Electricians",
+      "Builders & contractors",
+      "Plumber & HVAC tech",
+      "Cleaning services",
+      "Transport logistics & movers",
+      "Lawn & snow removal",
+      "Labour work services",
+      "Security"
+    ],
+    "Financial Services": [
+      "Financial Literacy",
+      "Accountants & tax services",
+      "Insurance agents",
+      "Investments",
+      "Debt relief services"
+    ],
+    "Legal Services": [
+      "Immigration law",
+      "Employment & business law",
+      "Human rights law",
+      "Personal injury law"
+    ],
+    "IT & Tech Services": [
+      "Web developers & software design",
+      "Surveillance & communication services",
+      "Computer, phone & gadgets services"
+    ],
+    "Entertainments": [
+      "Games & arcade centers",
+      "Event planners & promoters",
+      "Event venues & studios",
+      "DJs",
+      "Festivals",
+      "Events Equipment rentals"
+    ],
+    "Cars & Automotive": [
+      "Mechanics & auto repairs",
+      "Car Dealerships & rentals",
+      "Towing",
+      "Car detailing & accessories",
+      "Body shop & custom modifications",
+      "Parts"
+    ]
+  }
+  

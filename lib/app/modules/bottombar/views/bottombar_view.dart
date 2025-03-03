@@ -1,4 +1,5 @@
 import 'package:ebony_market_app/app/core/constant/constant.dart';
+import 'package:ebony_market_app/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -29,7 +30,7 @@ class BottombarView extends GetView<BottombarController> {
         elevation: 1,
         shape: CircleBorder(),
         onPressed: () {
-          // Add your FAB action here
+          Get.toNamed(Routes.BUSINESS);
         },
         child: const Icon(Icons.add, color: GColors.white),
       ),
