@@ -72,7 +72,7 @@ class BusinessController extends GetxController {
   void loadCategories() async {
     try {
       final categoriesJson = await rootBundle.loadString(
-          'lib/app/modules/business/data/model/business_categories_model.json');
+          'assets/json/business_categories_model.json');
       final Map<String, dynamic> data = json.decode(categoriesJson);
       categoriesData.clear();
       categoriesData.addAll(data);

@@ -3,8 +3,23 @@ PODS:
     - Flutter
     - FlutterMacOS
   - Flutter (1.0.0)
+  - get_thumbnail_video (0.0.1):
+    - Flutter
+    - libwebp
   - image_picker_ios (0.0.1):
     - Flutter
+  - libwebp (1.5.0):
+    - libwebp/demux (= 1.5.0)
+    - libwebp/mux (= 1.5.0)
+    - libwebp/sharpyuv (= 1.5.0)
+    - libwebp/webp (= 1.5.0)
+  - libwebp/demux (1.5.0):
+    - libwebp/webp
+  - libwebp/mux (1.5.0):
+    - libwebp/demux
+  - libwebp/sharpyuv (1.5.0)
+  - libwebp/webp (1.5.0):
+    - libwebp/sharpyuv
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -12,14 +27,21 @@ PODS:
 DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
   - Flutter (from `Flutter`)
+  - get_thumbnail_video (from `.symlinks/plugins/get_thumbnail_video/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+
+SPEC REPOS:
+  trunk:
+    - libwebp
 
 EXTERNAL SOURCES:
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/darwin"
   Flutter:
     :path: Flutter
+  get_thumbnail_video:
+    :path: ".symlinks/plugins/get_thumbnail_video/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
@@ -28,7 +50,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   connectivity_plus: 18382e7311ba19efcaee94442b23b32507b20695
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  get_thumbnail_video: b9a180957daed3e9179e66268db51d8798e41f65
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
+  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
