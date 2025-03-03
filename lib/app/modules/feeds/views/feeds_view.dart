@@ -39,7 +39,7 @@ class FeedsView extends GetView<FeedsController> {
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
-                          'https://img.freepik.com/free-photo/close-up-portrait-curly-handsome-european-male_176532-8133.jpg?t=st=1740211208~exp=1740214808~hmac=df3e53da277aa86d50450b971d9f1be7e52698a1e7177d59abc139b8889d2f63&w=2000',
+                          'https://img.freepik.com/free-photo/medium-shot-man-posing-outside_23-2149028795.jpg?t=st=1740988628~exp=1740992228~hmac=a7877e41047e07be9e276337df08b09d3c002b07632819f10c43afb750d36364&w=1060',
                         ),
                       ),
                     ),

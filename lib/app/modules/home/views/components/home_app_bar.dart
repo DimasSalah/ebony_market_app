@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 
 import '../../../../core/constant/constant.dart';
 import '../../../../core/utils/helper/global_text_format.dart';
+import '../../../../routes/app_pages.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
@@ -25,8 +27,10 @@ class HomeAppBar extends StatelessWidget {
             subtitle: Text('Jhon Doe',
                 style: Poppins.semiBold
                     .copyWith(color: GColors.white, fontSize: 16)),
-            trailing:
-                HeroIcon(HeroIcons.userCircle, color: GColors.white, size: 34),
+            trailing: GestureDetector(
+                onTap: () => Get.toNamed(Routes.PROFILE),
+                child: HeroIcon(HeroIcons.userCircle,
+                    color: GColors.white, size: 34)),
           ),
         ],
       ),
