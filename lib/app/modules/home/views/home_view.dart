@@ -1,5 +1,6 @@
 import 'package:ebony_market_app/app/core/utils/extension/sizedbox_extension.dart';
 import 'package:ebony_market_app/app/core/utils/widgets/textfields/input_primary.dart';
+import 'package:ebony_market_app/app/modules/home/views/sub_categories_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -70,30 +71,39 @@ class HomeView extends GetView<HomeController> {
                       childAspectRatio: 0.8,
                     ),
                     itemCount: controller.categories.length,
-                    itemBuilder: (context, index) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: GColors.primary.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(10),
+                    itemBuilder: (context, index) {
+                      final category = controller.categories[index];
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Get.to(() => SubCategoriesView(
+                                  category: category,
+                                )),
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: GColors.primary.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: HeroIcon(
+                                controller.getCategoryIcon(
+                                    controller.categories[index].name),
+                                color: GColors.primary,
+                              ),
+                            ),
                           ),
-                          child: HeroIcon(
-                            controller.categories.values.toList()[index],
-                            color: GColors.primary,
+                          5.s,
+                          Text(
+                            controller.categories[index].name,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: Tz.small),
                           ),
-                        ),
-                        5.s,
-                        Text(
-                          controller.categories.keys.toList()[index],
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: Tz.small),
-                        ),
-                      ],
-                    ),
+                        ],
+                      );
+                    },
                   ),
                   SizedBox(
                     height: 100,
