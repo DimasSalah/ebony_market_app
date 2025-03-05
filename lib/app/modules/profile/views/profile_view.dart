@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import '../../../core/constant/constant.dart';
 import '../../../core/utils/extension/sizedbox_extension.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -20,7 +21,7 @@ class ProfileView extends GetView<ProfileController> {
             backgroundColor: GColors.primary,
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => Get.offAllNamed(Routes.LOGIN),
                 icon: HeroIcon(
                   HeroIcons.arrowRightStartOnRectangle,
                   size: 26,

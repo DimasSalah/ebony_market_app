@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "777326681647",
+    "project_id": "ebony-market-app",
+    "storage_bucket": "ebony-market-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777326681647:android:a51a43e63046cb3a0c70da",
+        "android_client_info": {
+          "package_name": "com.ebony_market_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARSOsSw0NOecM7Za_UdY1wyyEo6y7IvwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

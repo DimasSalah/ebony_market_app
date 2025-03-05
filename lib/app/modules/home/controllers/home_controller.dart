@@ -37,6 +37,7 @@ class HomeController extends GetxController {
 
       categories.value =
           data.entries.map((entry) => CategoryModel.fromJson(entry)).toList();
+      update(['categories']);
     } catch (e) {
       print('Error loading categories: $e');
     }

@@ -60,50 +60,55 @@ class HomeView extends GetView<HomeController> {
                     ],
                   ),
                   20.s,
-                  GridView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 0.8,
-                    ),
-                    itemCount: controller.categories.length,
-                    itemBuilder: (context, index) {
-                      final category = controller.categories[index];
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Get.to(() => SubCategoriesView(
-                                  category: category,
-                                )),
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: GColors.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(10),
+                  GetBuilder<HomeController>(
+                    id: 'categories',
+                    builder: (controller) {
+                      return GridView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.8,
+                        ),
+                        itemCount: controller.categories.length,
+                        itemBuilder: (context, index) {
+                          final category = controller.categories[index];
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: () => Get.to(() => SubCategoriesView(
+                                      category: category,
+                                    )),
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: GColors.primary.withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: HeroIcon(
+                                    controller.getCategoryIcon(
+                                        controller.categories[index].name),
+                                    color: GColors.primary,
+                                  ),
+                                ),
                               ),
-                              child: HeroIcon(
-                                controller.getCategoryIcon(
-                                    controller.categories[index].name),
-                                color: GColors.primary,
+                              5.s,
+                              Text(
+                                controller.categories[index].name,
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: Tz.small),
                               ),
-                            ),
-                          ),
-                          5.s,
-                          Text(
-                            controller.categories[index].name,
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: Tz.small),
-                          ),
-                        ],
+                            ],
+                          );
+                        },
                       );
-                    },
+                    }
                   ),
                   SizedBox(
                     height: 100,
