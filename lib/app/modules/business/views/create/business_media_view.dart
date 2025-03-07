@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 
-import '../../../core/constant/constant.dart';
-import '../../../core/utils/widgets/buttons/button_primary.dart';
-import '../../../core/utils/widgets/textfields/input_primary.dart';
-import '../controllers/business_controller.dart';
+import '../../../../core/constant/constant.dart';
+import '../../../../core/utils/widgets/buttons/button_primary.dart';
+import '../../../../core/utils/widgets/textfields/input_primary.dart';
+import '../../controllers/business_controller.dart';
 import 'business_preview_view.dart';
 
 class BusinessMediaView extends GetView<BusinessController> {

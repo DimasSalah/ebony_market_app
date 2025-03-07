@@ -13,6 +13,8 @@ abstract class Routes {
   static const BUSINESS = _Paths.BUSINESS;
   static const PROFILE = _Paths.PROFILE;
   static const LOGIN = _Paths.LOGIN;
+  static const BUSINESS_DETAIL = _Paths.BUSINESS_DETAIL;
+  static const BUSINESS_LIST = _Paths.BUSINESS_LIST;
 }
 
 abstract class _Paths {
@@ -27,4 +29,6 @@ abstract class _Paths {
   static const BUSINESS = '/business';
   static const PROFILE = '/profile';
   static const LOGIN = '/login';
+  static const BUSINESS_DETAIL = '/business/business-detail';
+  static const BUSINESS_LIST = '/business/business-list';
 }

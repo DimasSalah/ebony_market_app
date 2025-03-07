@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 
-import '../../../core/constant/constant.dart';
-import '../../../core/utils/widgets/buttons/button_primary.dart';
-import '../controllers/business_controller.dart';
+import '../../../../core/constant/constant.dart';
+import '../../../../core/utils/widgets/buttons/button_primary.dart';
+import '../../controllers/business_controller.dart';
 
 class BusinessPreviewView extends GetView<BusinessController> {
   const BusinessPreviewView({super.key});

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../../../core/constant/constant.dart';
-import '../../../core/utils/widgets/buttons/button_primary.dart';
-import '../../../core/utils/widgets/textfields/input_primary.dart';
-import '../controllers/business_controller.dart';
+import '../../../../core/constant/constant.dart';
+import '../../../../core/utils/widgets/buttons/button_primary.dart';
+import '../../../../core/utils/widgets/textfields/input_primary.dart';
+import '../../controllers/business_controller.dart';
 
 class BusinessView extends GetView<BusinessController> {
   const BusinessView({super.key});

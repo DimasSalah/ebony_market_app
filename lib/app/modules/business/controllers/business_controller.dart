@@ -10,8 +10,8 @@ import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/constant/constant.dart';
-import '../views/business_preview_view.dart';
-import '../views/business_media_view.dart';
+import '../views/create/business_preview_view.dart';
+import '../views/create/business_media_view.dart';
 
 class BusinessController extends GetxController {
   final formKey = GlobalKey<FormState>();

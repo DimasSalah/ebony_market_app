@@ -21,6 +21,14 @@ class ProfileView extends GetView<ProfileController> {
             backgroundColor: GColors.primary,
             actions: [
               IconButton(
+                onPressed: () => showChatPreview(),
+                icon: HeroIcon(
+                  HeroIcons.chatBubbleLeftRight,
+                  size: 26,
+                  color: Colors.white,
+                ),
+              ),
+              IconButton(
                 onPressed: () => Get.offAllNamed(Routes.LOGIN),
                 icon: HeroIcon(
                   HeroIcons.arrowRightStartOnRectangle,
@@ -298,6 +306,82 @@ class ProfileView extends GetView<ProfileController> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void showChatPreview() {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: GColors.primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: HeroIcon(
+                  HeroIcons.chatBubbleLeftRight,
+                  size: 40,
+                  color: GColors.primary,
+                ),
+              ),
+              16.s,
+              Text(
+                'Coming Soon!',
+                style: Poppins.semiBold.copyWith(fontSize: 18),
+              ),
+              12.s,
+              Text(
+                'Our chat feature is under development and will be available soon.',
+                textAlign: TextAlign.center,
+                style: Poppins.regular.copyWith(
+                  color: GColors.textSecondary,
+                ),
+              ),
+              24.s,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      'Close',
+                      style: Poppins.medium.copyWith(
+                        color: GColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     Get.back();
+                  //     Get.to(() => ChatView());
+                  //   },
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: GColors.primary,
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(8),
+                  //     ),
+                  //   ),
+                  //   child: Text(
+                  //     'Preview Anyway',
+                  //     style: Poppins.medium.copyWith(
+                  //       color: Colors.white,
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

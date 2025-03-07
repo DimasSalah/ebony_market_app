@@ -10,6 +10,12 @@ class FeedsController extends GetxController {
   final selectedImages = <XFile>[].obs;
   final ImagePicker _picker = ImagePicker();
 
+  // For comment replies
+  final expandedComments = <int>[].obs;
+  final replyingTo = ''.obs;
+  final replyingToCommentId = (-1).obs;
+  final commentController = TextEditingController();
+
   @override
   void onInit() {
     super.onInit();
@@ -75,9 +81,53 @@ class FeedsController extends GetxController {
     }
   }
 
+  void toggleShowReplies(int commentId) {
+    if (expandedComments.contains(commentId)) {
+      expandedComments.remove(commentId);
+    } else {
+      expandedComments.add(commentId);
+    }
+  }
+
+  void replyToComment(int commentId, {String replyUserName = 'User Name'}) {
+    replyingTo.value = replyUserName;
+    replyingToCommentId.value = commentId;
+    commentController.text = '';
+    // Focus the text field
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
+  }
+
+  void cancelReply() {
+    replyingTo.value = '';
+    replyingToCommentId.value = -1;
+  }
+
+  void sendComment() {
+    if (commentController.text.trim().isEmpty) return;
+
+    // TODO: Implement sending comment or reply
+    if (replyingToCommentId.value >= 0) {
+      print(
+          'Replying to comment ${replyingToCommentId.value}: ${commentController.text}');
+      // Add reply to the comment
+      // Expand the comment to show the new reply
+      if (!expandedComments.contains(replyingToCommentId.value)) {
+        expandedComments.add(replyingToCommentId.value);
+      }
+    } else {
+      print('Adding new comment: ${commentController.text}');
+      // Add new comment
+    }
+
+    // Clear input and reset reply state
+    commentController.clear();
+    cancelReply();
+  }
+
   @override
   void onClose() {
     captionController.dispose();
+    commentController.dispose();
     super.onClose();
   }
 }

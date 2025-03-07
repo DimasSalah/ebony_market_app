@@ -8,8 +8,6 @@ import '../../../core/utils/extension/sizedbox_extension.dart';
 import '../../../core/utils/widgets/buttons/button_primary.dart';
 import '../../../core/utils/widgets/textfields/input_primary.dart';
 import '../controllers/login_controller.dart';
-import 'package:chewie/chewie.dart';
-import 'package:video_player/video_player.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});

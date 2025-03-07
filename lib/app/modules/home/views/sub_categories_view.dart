@@ -1,4 +1,5 @@
 import 'package:ebony_market_app/app/core/utils/extension/sizedbox_extension.dart';
+import 'package:ebony_market_app/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
@@ -94,10 +95,13 @@ class SubCategoriesView extends GetView<HomeController> {
                 return GestureDetector(
                   onTap: () {
                     // TODO: Navigate to businesses with this sub-category
-                    Get.toNamed('/businesses', arguments: {
-                      'category': category.name,
-                      'subCategory': subCategory,
-                    });
+                    Get.toNamed(
+                      Routes.BUSINESS_LIST,
+                      arguments: {
+                        'category': category.name,
+                        'subCategory': subCategory,
+                      },
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),

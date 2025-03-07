@@ -59,14 +59,19 @@ class FeedsCard extends StatelessWidget {
                       style: Poppins.regular.copyWith(fontSize: Tz.small),
                     ),
                     10.s,
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: Image.asset(
-                          image,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
+                    GestureDetector(
+                      onTap: () => Get.to(() => FeedsDetailView(
+                            image: image,
+                          )),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Image.asset(
+                            image,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
                         ),
                       ),
                     ),
@@ -89,7 +94,7 @@ class FeedsCard extends StatelessWidget {
                               fontSize: Tz.small, color: GColors.textSecondary),
                         ),
                         14.s,
-                        GestureDetector( 
+                        GestureDetector(
                           onTap: () {
                             Get.to(() => FeedsDetailView(
                                   image: image,
