@@ -29,7 +29,6 @@ class FeedsUploadView extends GetView<FeedsController> {
         actions: [
           TextButton(
             onPressed: () {
-              // Handle post
               controller.uploadPost();
             },
             child: Text(
@@ -57,14 +56,14 @@ class FeedsUploadView extends GetView<FeedsController> {
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
-                          'https://img.freepik.com/free-photo/portrait-friendly-looking-happy-attractive-male-model-with-moustache-beard-wearing-trendy-transparent-glasses-smiling-broadly-while-listening-interesting-story-waiting-mom-give-meal_176420-22400.jpg',
+                          'https://ui-avatars.com/api/?name=User&background=random',
                         ),
                       ),
                     ),
                   ),
                   10.s,
                   Text(
-                    'John Doe',
+                    'User Name',
                     style: Poppins.medium.copyWith(fontSize: Tz.medium),
                   ),
                 ],

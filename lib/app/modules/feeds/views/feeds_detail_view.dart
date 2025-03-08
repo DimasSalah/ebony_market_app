@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
-
 import '../../../core/constant/constant.dart';
 import '../../../core/utils/extension/sizedbox_extension.dart';
 import '../controllers/feeds_controller.dart';
+import '../data/models/feeds_model.dart';
+import '../data/models/comment_model.dart';
+import '../data/models/reply_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class FeedsDetailView extends GetView<FeedsController> {
-  final String image;
-  const FeedsDetailView({super.key, required this.image});
+  final FeedsModel feed;
+  const FeedsDetailView({super.key, required this.feed});
+
+  List<Reply> getRepliesForComment(Comment comment) {
+    return controller.replies
+        .where((reply) => comment.replyIds.contains(reply.id))
+        .toList();
+  }
+
+  String getTimeAgo(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +83,6 @@ class FeedsDetailView extends GetView<FeedsController> {
       ),
       body: Column(
         children: [
-          // Post Content
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -69,27 +92,41 @@ class FeedsDetailView extends GetView<FeedsController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // User Info
-
                         10.s,
                         // Caption
                         Text(
-                          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+                          feed.caption,
                           style: Poppins.regular.copyWith(fontSize: Tz.small),
                         ),
                         10.s,
                         // Post Image
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: Image.asset(
-                              image,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
+                        if (feed.imageUrl != null)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: CachedNetworkImage(
+                                imageUrl: feed.imageUrl!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                placeholder: (context, url) => Container(
+                                  color: GColors.greyContainer,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: GColors.greyContainer,
+                                  child: Center(
+                                    child: HeroIcon(
+                                      HeroIcons.photo,
+                                      color: GColors.textSecondary,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
                         10.s,
                         // Like & Comment Count
                         Row(
@@ -100,7 +137,7 @@ class FeedsDetailView extends GetView<FeedsController> {
                             ),
                             5.s,
                             Text(
-                              '123 Likes',
+                              '${feed.likes?.length ?? 0} Likes',
                               style: Poppins.regular.copyWith(
                                 fontSize: Tz.small,
                                 color: GColors.textSecondary,
@@ -108,7 +145,7 @@ class FeedsDetailView extends GetView<FeedsController> {
                             ),
                             14.s,
                             Text(
-                              '123 Comments',
+                              '${feed.commentIds.length} Comments',
                               style: Poppins.regular.copyWith(
                                 fontSize: Tz.small,
                                 color: GColors.textSecondary,
@@ -121,272 +158,215 @@ class FeedsDetailView extends GetView<FeedsController> {
                     ),
                   ),
                   // Comments List
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      // Determine if this comment has replies
-                      bool hasReplies = index % 3 == 0; // Just for demo
+                  Obx(() => ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.comments.length,
+                        itemBuilder: (context, index) {
+                          final comment = controller.comments[index];
+                          final hasReplies = comment.replyIds.isNotEmpty;
+                          final replies = getRepliesForComment(comment);
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Main comment
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 35,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                        'https://i.pravatar.cc/150?img=$index',
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Main comment
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 35,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                            'https://i.pravatar.cc/150?img=$index}',
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                10.s,
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
+                                    10.s,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            'User Name',
-                                            style: Poppins.medium,
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'User ${comment.uid ?? "Unknown"}',
+                                                style: Poppins.medium,
+                                              ),
+                                              5.s,
+                                              Text(
+                                                getTimeAgo(comment.createdOn),
+                                                style: Poppins.regular.copyWith(
+                                                  fontSize: Tz.small,
+                                                  color: GColors.textSecondary,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                           5.s,
                                           Text(
-                                            '2h ago',
+                                            comment.content,
                                             style: Poppins.regular.copyWith(
                                               fontSize: Tz.small,
-                                              color: GColors.textSecondary,
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      5.s,
-                                      Text(
-                                        'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-                                        style: Poppins.regular.copyWith(
-                                          fontSize: Tz.small,
-                                        ),
-                                      ),
-                                      5.s,
-                                      Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              // Handle like comment
-                                            },
-                                            child: Text(
-                                              'Like',
-                                              style: Poppins.semiBold.copyWith(
-                                                fontSize: Tz.small,
-                                                color: GColors.textSecondary,
+                                          5.s,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  controller.replyToComment(
+                                                      index,
+                                                      replyUserName:
+                                                          'User ${comment.uid ?? "Unknown"}');
+                                                },
+                                                child: Text(
+                                                  'Reply',
+                                                  style:
+                                                      Poppins.semiBold.copyWith(
+                                                    fontSize: Tz.small,
+                                                    color:
+                                                        GColors.textSecondary,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          15.s,
-                                          GestureDetector(
-                                            onTap: () {
-                                              // Handle reply to comment
-                                              controller.replyToComment(index);
-                                            },
-                                            child: Text(
-                                              'Reply',
-                                              style: Poppins.semiBold.copyWith(
-                                                fontSize: Tz.small,
-                                                color: GColors.textSecondary,
-                                              ),
-                                            ),
-                                          ),
-                                          if (hasReplies) ...[
-                                            15.s,
-                                            GestureDetector(
-                                              onTap: () {
-                                                // Toggle showing replies
-                                                controller
-                                                    .toggleShowReplies(index);
-                                              },
-                                              child: Obx(() => Text(
+                                              if (hasReplies) ...[
+                                                15.s,
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    controller
+                                                        .toggleShowReplies(
+                                                            index);
+                                                  },
+                                                  child: Text(
                                                     controller.expandedComments
                                                             .contains(index)
                                                         ? 'Hide Replies'
-                                                        : 'View Replies (3)',
+                                                        : 'View Replies (${replies.length})',
                                                     style: Poppins.semiBold
                                                         .copyWith(
                                                       fontSize: Tz.small,
                                                       color:
                                                           GColors.textSecondary,
                                                     ),
-                                                  )),
-                                            ),
-                                          ],
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    // Show comment options
-                                  },
-                                  icon: HeroIcon(
-                                    HeroIcons.ellipsisVertical,
-                                    size: 16,
-                                    color: GColors.textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          // Replies section
-                          if (hasReplies)
-                            Obx(() => controller.expandedComments
-                                    .contains(index)
-                                ? Column(
-                                    children: List.generate(3, (replyIndex) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 60,
-                                          right: 16,
-                                          top: 4,
-                                          bottom: 4,
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: 28,
-                                              height: 28,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(
-                                                    'https://i.pravatar.cc/150?img=${index + replyIndex + 10}',
                                                   ),
                                                 ),
-                                              ),
+                                              ],
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        // Show report options
+                                      },
+                                      icon: HeroIcon(
+                                        HeroIcons.ellipsisVertical,
+                                        size: 16,
+                                        color: GColors.textSecondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // Replies section
+                              if (hasReplies)
+                                Obx(() => controller.expandedComments
+                                        .contains(index)
+                                    ? Column(
+                                        children: replies.map((reply) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 60,
+                                              right: 16,
+                                              top: 4,
+                                              bottom: 4,
                                             ),
-                                            10.s,
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        'Reply User',
-                                                        style: Poppins.medium
-                                                            .copyWith(
-                                                          fontSize: Tz.small,
-                                                        ),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: 28,
+                                                  height: 28,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: NetworkImage(
+                                                        'https://i.pravatar.cc/150?img=$index',
                                                       ),
-                                                      5.s,
-                                                      Text(
-                                                        '1h ago',
-                                                        style: Poppins.regular
-                                                            .copyWith(
-                                                          fontSize: 10,
-                                                          color: GColors
-                                                              .textSecondary,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  3.s,
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text: 'User Name ',
-                                                          style: Poppins.medium
-                                                              .copyWith(
-                                                            fontSize: Tz.small,
-                                                            color: GColors
-                                                                .textPrimary,
-                                                          ),
-                                                        ),
-                                                        TextSpan(
-                                                          text:
-                                                              'Reply to the comment with additional context and information.',
-                                                          style: Poppins.regular
-                                                              .copyWith(
-                                                            fontSize: Tz.small,
-                                                            color: GColors
-                                                                .textPrimary,
-                                                          ),
-                                                        ),
-                                                      ],
                                                     ),
                                                   ),
-                                                  5.s,
-                                                  Row(
+                                                ),
+                                                10.s,
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          // Handle like reply
-                                                        },
-                                                        child: Text(
-                                                          'Like',
-                                                          style: Poppins
-                                                              .semiBold
-                                                              .copyWith(
-                                                            fontSize: 10,
-                                                            color: GColors
-                                                                .textSecondary,
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            'User ${reply.uid}',
+                                                            style: Poppins
+                                                                .medium
+                                                                .copyWith(
+                                                              fontSize:
+                                                                  Tz.small,
+                                                            ),
                                                           ),
-                                                        ),
+                                                          5.s,
+                                                          Text(
+                                                            getTimeAgo(reply
+                                                                .createdOn),
+                                                            style: Poppins
+                                                                .regular
+                                                                .copyWith(
+                                                              fontSize: 10,
+                                                              color: GColors
+                                                                  .textSecondary,
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      15.s,
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          // Handle reply to reply
-                                                          controller.replyToComment(
-                                                              index,
-                                                              replyUserName:
-                                                                  'Reply User');
-                                                        },
-                                                        child: Text(
-                                                          'Reply',
-                                                          style: Poppins
-                                                              .semiBold
-                                                              .copyWith(
-                                                            fontSize: 10,
-                                                            color: GColors
-                                                                .textSecondary,
-                                                          ),
+                                                      3.s,
+                                                      Text(
+                                                        reply.content,
+                                                        style: Poppins.regular
+                                                            .copyWith(
+                                                          fontSize: Tz.small,
+                                                          color: GColors
+                                                              .textPrimary,
                                                         ),
                                                       ),
                                                     ],
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                                  )
-                                : SizedBox()),
-                        ],
-                      );
-                    },
-                  ),
+                                          );
+                                        }).toList(),
+                                      )
+                                    : SizedBox()),
+                            ],
+                          );
+                        },
+                      )),
                 ],
               ),
             ),
@@ -457,7 +437,6 @@ class FeedsDetailView extends GetView<FeedsController> {
                     ),
                     IconButton(
                       onPressed: () {
-                        // Handle send comment or reply
                         controller.sendComment();
                       },
                       icon: HeroIcon(
