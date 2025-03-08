@@ -1,15 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ebony_market_app/app/core/utils/extension/sizedbox_extension.dart';
+import 'package:ebony_market_app/app/modules/home/data/models/category_model.dart';
 import 'package:ebony_market_app/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import '../../../core/constant/constant.dart';
 import '../controllers/home_controller.dart';
-import '../data/models/category_model.dart';
 
 class SubCategoriesView extends GetView<HomeController> {
-  final CategoryModel category;
-
+  final Category category;
+  
   const SubCategoriesView({
     super.key,
     required this.category,
@@ -67,9 +68,17 @@ class SubCategoriesView extends GetView<HomeController> {
                         ),
                         4.s,
                         Text(
-                          '${category.subCategories.length} sub-categories',
+                          '${category.subcategories.length} sub-categories',
                           style: Poppins.regular.copyWith(
                             color: GColors.textSecondary,
+                          ),
+                        ),
+                        8.s,
+                        Text(
+                          category.description,
+                          style: Poppins.regular.copyWith(
+                            color: GColors.textSecondary,
+                            fontSize: 12,
                           ),
                         ),
                       ],
@@ -87,26 +96,24 @@ class SubCategoriesView extends GetView<HomeController> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 1.5,
+                childAspectRatio: 1.5, // Adjusted for image
               ),
-              itemCount: category.subCategories.length,
+              itemCount: category.subcategories.length,
               itemBuilder: (context, index) {
-                final subCategory = category.subCategories[index];
+                final subCategory = category.subcategories[index];
                 return GestureDetector(
                   onTap: () {
-                    // TODO: Navigate to businesses with this sub-category
                     Get.toNamed(
                       Routes.BUSINESS_LIST,
                       arguments: {
                         'category': category.name,
-                        'subCategory': subCategory,
+                        'subCategory': subCategory.name,
+                        'subCategoryId': subCategory.id,
                       },
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
@@ -116,13 +123,43 @@ class SubCategoriesView extends GetView<HomeController> {
                         ),
                       ],
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Stack(
                       children: [
-                        Text(
-                          subCategory,
-                          textAlign: TextAlign.center,
-                          style: Poppins.medium.copyWith(fontSize: 14),
+                        // Background image
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: CachedNetworkImage(
+                            imageUrl: subCategory.image,
+                            fit: BoxFit.cover,
+                            height: double.infinity,
+                            width: double.infinity,
+                            placeholder: (context, url) => Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                        ),
+                        // Dark overlay for better text visibility
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.black.withOpacity(0.4),
+                          ),
+                        ),
+                        // Centered text
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              subCategory.name,
+                              style: Poppins.semiBold.copyWith(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ),
                       ],
                     ),

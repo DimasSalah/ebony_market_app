@@ -8,6 +8,8 @@ import '../modules/business/bindings/business_list_binding.dart';
 import '../modules/business/views/list/business_detail_view.dart';
 import '../modules/business/views/list/business_list_view.dart';
 import '../modules/business/views/create/business_view.dart';
+import '../modules/business/views/list/business_detail_view.dart';
+import '../modules/business/views/list/business_list_view.dart';
 import '../modules/events/bindings/events_binding.dart';
 import '../modules/events/views/events_details_view.dart';
 import '../modules/events/views/events_view.dart';
