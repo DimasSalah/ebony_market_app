@@ -52,7 +52,8 @@ class EditProfileView extends GetView<ProfileController> {
                         image: controller.profileImage.value != null
                             ? FileImage(
                                 File(controller.profileImage.value!.path))
-                            : NetworkImage('https://img.freepik.com/free-photo/medium-shot-man-posing-outside_23-2149028795.jpg?t=st=1740988628~exp=1740992228~hmac=a7877e41047e07be9e276337df08b09d3c002b07632819f10c43afb750d36364&w=1060')
+                            : NetworkImage(
+                                    'https://img.freepik.com/free-photo/medium-shot-man-posing-outside_23-2149028795.jpg?t=st=1740988628~exp=1740992228~hmac=a7877e41047e07be9e276337df08b09d3c002b07632819f10c43afb750d36364&w=1060')
                                 as ImageProvider,
                         fit: BoxFit.cover,
                       ),
@@ -177,7 +178,7 @@ class EditProfileView extends GetView<ProfileController> {
                                 .entries
                                 .map((entry) {
                               final index = entry.key;
-                              final link = entry.value;
+                              final link = entry.value as Map<String, String>;
                               return Container(
                                 margin: EdgeInsets.only(bottom: 12),
                                 padding: EdgeInsets.all(12),
@@ -206,11 +207,11 @@ class EditProfileView extends GetView<ProfileController> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            link.platform,
+                                            link['platform'] ?? '',
                                             style: Poppins.medium,
                                           ),
                                           Text(
-                                            link.url,
+                                            link['url'] ?? '',
                                             style: Poppins.regular.copyWith(
                                               color: GColors.textSecondary,
                                               fontSize: 12,

@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:ebony_market_app/app/core/utils/extension/sizedbox_extension.dart';
 import 'package:ebony_market_app/app/core/utils/widgets/textfields/input_primary.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../data/models/user_model.dart';
 
 import '../../../core/constant/constant.dart';
 import '../../../core/utils/widgets/buttons/button_primary.dart';
@@ -16,89 +18,21 @@ class SocialLink {
 }
 
 class ProfileController extends GetxController {
-  // Text Controllers
+  final currentUser = Rxn<UserModel>();
+  final isLoading = true.obs;
+  final businesses = [].obs;
+
+  // For edit profile
+  final profileImage = Rxn<XFile>();
   final nameC = TextEditingController();
   final bioC = TextEditingController();
   final emailC = TextEditingController();
-  final websiteC = TextEditingController();
-  final instagramC = TextEditingController();
-  final twitterC = TextEditingController();
-
-  // Business List
-  final businesses = [].obs;
-
-  // Profile Image
-  final profileImage = Rxn<XFile>();
-
-  final count = 0.obs;
-
-  // Tambahkan list untuk social links
-  final socialLinks = <SocialLink>[].obs;
-
-  // Controller untuk form tambah social link
-  final platformC = TextEditingController();
-  final urlC = TextEditingController();
+  final socialLinks = [].obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Load user data
     loadUserData();
-    // Load user businesses
-    loadUserBusinesses();
-  }
-
-  void loadUserData() {
-    // TODO: Implement loading user data from API
-    nameC.text = 'John Doe';
-    bioC.text = 'Digital entrepreneur & tech enthusiast';
-    emailC.text = 'john.doe@example.com';
-    websiteC.text = 'www.johndoe.com';
-    instagramC.text = '@johndoe';
-    twitterC.text = '@johndoe';
-  }
-
-  void loadUserBusinesses() {
-    // TODO: Implement loading user businesses from API
-  }
-
-  Future<void> pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    try {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        profileImage.value = image;
-      }
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to pick image',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
-  }
-
-  Future<void> updateProfile() async {
-    try {
-      // TODO: Implement profile update logic
-      Get.back();
-      Get.snackbar(
-        'Success',
-        'Profile updated successfully',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to update profile',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
   }
 
   @override
@@ -106,69 +40,155 @@ class ProfileController extends GetxController {
     nameC.dispose();
     bioC.dispose();
     emailC.dispose();
-    websiteC.dispose();
-    instagramC.dispose();
-    twitterC.dispose();
     super.onClose();
   }
 
-  void increment() => count.value++;
+  Future<void> loadUserData() async {
+    try {
+      isLoading.value = true;
+      // Simulate API call delay
+      await Future.delayed(Duration(seconds: 1));
 
-  void addSocialLink() {
-    if (platformC.text.isNotEmpty && urlC.text.isNotEmpty) {
-      socialLinks.add(SocialLink(
-        platform: platformC.text,
-        url: urlC.text,
-      ));
-      // Clear form
-      platformC.clear();
-      urlC.clear();
-      // Close bottom sheet
-      Get.back();
+      // Load dummy user data
+      currentUser.value = UserModel.dummyUser();
+
+      // Set initial values for edit profile
+      nameC.text = currentUser.value?.fullName ?? '';
+      bioC.text = currentUser.value?.bio ?? '';
+      emailC.text = currentUser.value?.email ?? '';
+
+      // Convert social links map to list for easier handling in UI
+      if (currentUser.value?.socialLinks != null) {
+        socialLinks.value = currentUser.value!.socialLinks!.entries
+            .map((e) => {'platform': e.key, 'url': e.value})
+            .toList();
+      }
+    } catch (e) {
+      print('Error loading user data: $e');
+    } finally {
+      isLoading.value = false;
     }
+  }
+
+  Future<void> pickImage() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        profileImage.value = image;
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    }
+  }
+
+  void showAddSocialLinkForm() {
+    final platformC = TextEditingController();
+    final urlC = TextEditingController();
+
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Add Social Link',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: platformC,
+                decoration: InputDecoration(
+                  labelText: 'Platform',
+                  hintText: 'e.g. Instagram, Twitter, etc.',
+                ),
+              ),
+              SizedBox(height: 8),
+              TextField(
+                controller: urlC,
+                decoration: InputDecoration(
+                  labelText: 'URL/Username',
+                  hintText: 'e.g. @username or website URL',
+                ),
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text('Cancel'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (platformC.text.isNotEmpty && urlC.text.isNotEmpty) {
+                        socialLinks.add({
+                          'platform': platformC.text,
+                          'url': urlC.text,
+                        });
+                        Get.back();
+                      }
+                    },
+                    child: Text('Add'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void removeSocialLink(int index) {
     socialLinks.removeAt(index);
   }
 
-  void showAddSocialLinkForm() {
-    Get.bottomSheet(
-      Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  Future<void> updateProfile() async {
+    try {
+      isLoading.value = true;
+      // Simulate API call delay
+      await Future.delayed(Duration(seconds: 1));
+
+      // Update user model
+      final updatedUser = UserModel(
+        uid: currentUser.value!.uid,
+        email: emailC.text,
+        fullName: nameC.text,
+        profileImg: profileImage.value?.path ?? currentUser.value?.profileImg,
+        bio: bioC.text,
+        socialLinks: Map.fromEntries(
+          socialLinks.map((link) => MapEntry(link['platform'], link['url'])),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Add Social Link',
-              style: Poppins.semiBold.copyWith(fontSize: 18),
-            ),
-            16.s,
-            InputPrimary(
-              controller: platformC,
-              label: 'Platform',
-              hint: 'Enter platform name (e.g. Instagram, Twitter)',
-            ),
-            16.s,
-            InputPrimary(
-              controller: urlC,
-              label: 'URL/Username',
-              hint: 'Enter your social link or username',
-            ),
-            24.s,
-            ButtonPrimary(
-              text: 'Add Link',
-              onPressed: addSocialLink,
-            ),
-          ],
-        ),
-      ),
-      isScrollControlled: true,
-    );
+        role: currentUser.value?.role,
+      );
+
+      // Update current user
+      currentUser.value = updatedUser;
+
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Profile updated successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      print('Error updating profile: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to update profile',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }
