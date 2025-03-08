@@ -82,9 +82,8 @@ class BusinessPreviewView extends GetView<BusinessController> {
                       ),
                       child: ClipOval(
                         child: Image.file(
-                          File(controller.businessLogo.value!.path),
-                          fit: BoxFit.cover
-                        ),
+                            File(controller.businessLogo.value!.path),
+                            fit: BoxFit.cover),
                       ),
                     ),
                   ),
@@ -174,6 +173,44 @@ class BusinessPreviewView extends GetView<BusinessController> {
                     ],
                   ),
                   24.s,
+
+                  // Social Media Section (if any social media is provided)
+                  if (controller.websiteC.text.isNotEmpty ||
+                      controller.facebookC.text.isNotEmpty ||
+                      controller.instagramC.text.isNotEmpty ||
+                      controller.twitterC.text.isNotEmpty) ...[
+                    _buildInfoSection(
+                      title: 'Social Media',
+                      children: [
+                        if (controller.websiteC.text.isNotEmpty)
+                          _buildInfoItem(
+                            icon: HeroIcons.globeAlt,
+                            title: 'Website',
+                            value: controller.websiteC.text,
+                          ),
+                        if (controller.facebookC.text.isNotEmpty)
+                          _buildInfoItem(
+                            icon: HeroIcons.link,
+                            title: 'Facebook',
+                            value: controller.facebookC.text,
+                          ),
+                        if (controller.instagramC.text.isNotEmpty)
+                          _buildInfoItem(
+                            icon: HeroIcons.camera,
+                            title: 'Instagram',
+                            value: controller.instagramC.text,
+                          ),
+                        if (controller.twitterC.text.isNotEmpty)
+                          _buildInfoItem(
+                            icon: HeroIcons.chatBubbleBottomCenterText,
+                            title: 'Twitter',
+                            value: controller.twitterC.text,
+                          ),
+                      ],
+                    ),
+                    24.s,
+                  ],
+
                   // Operating Hours Section
                   _buildInfoSection(
                     title: 'Operating Hours',

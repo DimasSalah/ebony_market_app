@@ -5,12 +5,18 @@ import '../data/models/business_model.dart';
 
 class BusinessDetailController extends GetxController {
   final isFavorite = false.obs;
+  final subCategoryName = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
     // Check if business is in favorites
     checkFavorite();
+  
+    // Get subcategory name from arguments if available
+    if (Get.arguments is Map && Get.arguments['subCategoryName'] != null) {
+      subCategoryName.value = Get.arguments['subCategoryName'];
+    }
   }
 
   void checkFavorite() {
@@ -37,7 +43,7 @@ class BusinessDetailController extends GetxController {
     }
   }
 
-  void shareBusiness(BusinessModel business) {
+  void shareBusiness(Business business) {
     // TODO: Implement share functionality
     Get.snackbar(
       'Share',
@@ -46,7 +52,16 @@ class BusinessDetailController extends GetxController {
     );
   }
 
-  void callBusiness(String phone) async {
+  void callBusiness(String? phone) async {
+    if (phone == null || phone.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Phone number not available',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
     final url = 'tel:$phone';
     if (await canLaunch(url)) {
       await launch(url);
@@ -81,7 +96,9 @@ class BusinessDetailController extends GetxController {
     }
   }
 
-  void messageBusiness(String businessId) {
+  void messageBusiness(String? businessId) {
+    if (businessId == null) return;
+
     // TODO: Implement messaging
     Get.snackbar(
       'Message',
@@ -107,12 +124,36 @@ class BusinessDetailController extends GetxController {
     );
   }
 
-  void viewAllReviews(String businessId) {
+  void viewAllReviews(String? businessId) {
+    if (businessId == null) return;
+
     // TODO: Implement view all reviews
     Get.snackbar(
       'Reviews',
       'View all reviews feature coming soon',
       snackPosition: SnackPosition.BOTTOM,
     );
+  }
+
+  // Helper method to format operating hours
+  Map<String, Map<String, String>> getFormattedHours(dynamic hours) {
+    if (hours == null) {
+      return {};
+    }
+
+    if (hours is Map) {
+      Map<String, Map<String, String>> result = {};
+      hours.forEach((key, value) {
+        if (value is Map) {
+          result[key.toString()] = {
+            'open': value['open']?.toString() ?? 'Closed',
+            'close': value['close']?.toString() ?? 'Closed',
+          };
+        }
+      });
+      return result;
+    }
+
+    return {};
   }
 }

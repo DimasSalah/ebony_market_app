@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:ebony_market_app/app/core/utils/extension/sizedbox_extension.dart';
 import 'package:ebony_market_app/app/routes/app_pages.dart';
@@ -10,7 +11,8 @@ import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/constant/constant.dart';
-import '../views/create/business_preview_view.dart';
+import '../data/models/business_model.dart';
+import '../../home/data/models/category_model.dart';
 import '../views/create/business_media_view.dart';
 
 class BusinessController extends GetxController {
@@ -24,11 +26,21 @@ class BusinessController extends GetxController {
   final addressC = TextEditingController();
   final descriptionC = TextEditingController();
 
+  // Social Media Controllers
+  final websiteC = TextEditingController();
+  final facebookC = TextEditingController();
+  final instagramC = TextEditingController();
+  final twitterC = TextEditingController();
+
   // Category Selection
   final categories = <String>[].obs;
   final selectedCategory = Rxn<String>();
   final selectedSubCategory = Rxn<String>();
+  final selectedSubCategoryId = Rxn<String>();
   final Map<String, dynamic> categoriesData = {};
+
+  // Store all categories from the Category model
+  final allCategories = <Category>[].obs;
 
   // Operating Hours
   final operatingHours = <OperatingHour>[].obs;
@@ -64,6 +76,10 @@ class BusinessController extends GetxController {
     phoneC.dispose();
     addressC.dispose();
     descriptionC.dispose();
+    websiteC.dispose();
+    facebookC.dispose();
+    instagramC.dispose();
+    twitterC.dispose();
     super.onClose();
   }
 
@@ -71,15 +87,22 @@ class BusinessController extends GetxController {
 
   void loadCategories() async {
     try {
-      final categoriesJson = await rootBundle.loadString(
-          'assets/json/business_categories_model.json');
-      final Map<String, dynamic> data = json.decode(categoriesJson);
+      // Load categories from the Category model
+      allCategories.value = Category.fetchAllCategories();
+
+      // Extract category names for the dropdown
+      categories.value = allCategories.map((cat) => cat.name).toList();
+
+      // Create a map of subcategories for each category
       categoriesData.clear();
-      categoriesData.addAll(data);
-      categories.value = categoriesData.keys.toList();
+      for (var category in allCategories) {
+        categoriesData[category.name] =
+            category.subcategories.map((sub) => sub.name).toList();
+      }
 
       selectedCategory.value = null;
       selectedSubCategory.value = null;
+      selectedSubCategoryId.value = null;
     } catch (e) {
       print('Error loading categories: $e');
     }
@@ -93,10 +116,26 @@ class BusinessController extends GetxController {
   void setCategory(String category) {
     selectedCategory.value = category;
     selectedSubCategory.value = null;
+    selectedSubCategoryId.value = null;
   }
 
   void setSubCategory(String subCategory) {
     selectedSubCategory.value = subCategory;
+
+    // Find the subcategory ID
+    if (selectedCategory.value != null) {
+      final categoryIndex =
+          allCategories.indexWhere((cat) => cat.name == selectedCategory.value);
+      if (categoryIndex >= 0) {
+        final subCategoryIndex = allCategories[categoryIndex]
+            .subcategories
+            .indexWhere((sub) => sub.name == subCategory);
+        if (subCategoryIndex >= 0) {
+          selectedSubCategoryId.value =
+              allCategories[categoryIndex].subcategories[subCategoryIndex].id;
+        }
+      }
+    }
   }
 
   void initializeOperatingHours() {
@@ -208,8 +247,54 @@ class BusinessController extends GetxController {
     }
   }
 
+  // Format operating hours to a string for the Business model
+  String formatOperatingHours() {
+    final Map<String, Map<String, String>> hoursMap = {};
+
+    for (var hour in operatingHours) {
+      if (hour.isOpen.value) {
+        hoursMap[hour.day] = {
+          'open': hour.openTime.value,
+          'close': hour.closeTime.value
+        };
+      }
+    }
+
+    return json.encode(hoursMap);
+  }
+
   void confirmBusiness() {
-    // Implement your API call here
+    // Create a Business object using the new model
+    final Business business = Business(
+      description: descriptionC.text,
+      image: businessBanner.value?.path ?? '',
+      name: businessNameC.text,
+      address: addressC.text,
+      email: emailC.text,
+      logo: businessLogo.value?.path ?? '',
+      subCategoryId: selectedSubCategoryId.value ?? '',
+      website: websiteC.text.isEmpty ? null : websiteC.text,
+      facebook: facebookC.text.isEmpty ? null : facebookC.text,
+      instagram: instagramC.text.isEmpty ? null : instagramC.text,
+      twitter: twitterC.text.isEmpty ? null : twitterC.text,
+      phone: phoneC.text,
+      hours: json.decode(formatOperatingHours()),
+      owner:
+          'current_user_id', // This would be replaced with actual user ID when connected to Firebase
+      ownerName: ownerNameC.text,
+      isApproved: false, // New businesses start as unapproved
+      latitude: null, // Would be set with actual location data
+      longitude: null, // Would be set with actual location data
+      images: businessImages.map((image) => image.path).toList(),
+      videos: businessVideo.value != null ? [businessVideo.value!.path] : [],
+      uploaderId:
+          'current_user_id', // This would be replaced with actual user ID when connected to Firebase
+    );
+
+    // In a real implementation, this would be sent to Firebase
+    log('Business to be created: ${business.toMap()}');
+
+    // Show loading dialog
     Get.dialog(
       Center(
         child: Container(

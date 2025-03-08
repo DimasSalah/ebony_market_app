@@ -2,6 +2,7 @@ import 'package:ebony_market_app/app/core/utils/extension/sizedbox_extension.dar
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 
 import '../../../../core/constant/constant.dart';
 import '../../../../core/utils/widgets/buttons/button_primary.dart';
@@ -89,7 +90,6 @@ class BusinessView extends GetView<BusinessController> {
                 InputPrimary(
                   label: 'Phone Number',
                   hint: 'Enter phone number',
-                  
                   controller: controller.phoneC,
                   isRequired: true,
                   keyboardType: TextInputType.phone,
@@ -116,6 +116,62 @@ class BusinessView extends GetView<BusinessController> {
                     }
                     return null;
                   },
+                ),
+
+                // Social Media Section
+                Text(
+                  'Social Media (Optional)',
+                  style: Poppins.semiBold,
+                ),
+                10.s,
+
+                // Website
+                InputPrimary(
+                  label: 'Website',
+                  hint: 'Enter website URL',
+                  controller: controller.websiteC,
+                  keyboardType: TextInputType.url,
+                  margin: EdgeInsets.only(bottom: 16),
+                  prefixIcon: HeroIcon(
+                    HeroIcons.globeAlt,
+                    color: GColors.textSecondary,
+                  ),
+                ),
+
+                // Facebook
+                InputPrimary(
+                  label: 'Facebook',
+                  hint: 'Enter Facebook profile',
+                  controller: controller.facebookC,
+                  margin: EdgeInsets.only(bottom: 16),
+                  prefixIcon: Icon(
+                    Icons.facebook,
+                    color: GColors.textSecondary,
+                  ),
+                ),
+
+                // Instagram
+                InputPrimary(
+                  label: 'Instagram',
+                  hint: 'Enter Instagram handle',
+                  controller: controller.instagramC,
+                  margin: EdgeInsets.only(bottom: 16),
+                  prefixIcon: Icon(
+                    Icons.camera_alt_outlined,
+                    color: GColors.textSecondary,
+                  ),
+                ),
+
+                // Twitter
+                InputPrimary(
+                  label: 'Twitter',
+                  hint: 'Enter Twitter handle',
+                  controller: controller.twitterC,
+                  margin: EdgeInsets.only(bottom: 24),
+                  prefixIcon: Icon(
+                    Icons.flutter_dash,
+                    color: GColors.textSecondary,
+                  ),
                 ),
 
                 // Category Selection

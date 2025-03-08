@@ -11,11 +11,13 @@ class BusinessListView extends GetView<BusinessListController> {
 
   @override
   Widget build(BuildContext context) {
+    final subCategory = Get.arguments['subCategory'] as String;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: GColors.backgroundColor,
         title: Text(
-          '${Get.arguments['subCategory']} Businesses',
+          '$subCategory Businesses',
           style: Poppins.semiBold.copyWith(fontSize: 18),
         ),
         centerTitle: true,
@@ -148,10 +150,24 @@ class BusinessListView extends GetView<BusinessListController> {
                                           topRight: Radius.circular(12),
                                         ),
                                         child: Image.network(
-                                          business.banner,
+                                          business.image ?? '',
                                           height: 120,
                                           width: double.infinity,
                                           fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Container(
+                                              height: 120,
+                                              width: double.infinity,
+                                              color: GColors.greyContainer,
+                                              child: Center(
+                                                child: HeroIcon(
+                                                  HeroIcons.photo,
+                                                  color: GColors.textSecondary,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
                                       // Business Logo
@@ -179,8 +195,26 @@ class BusinessListView extends GetView<BusinessListController> {
                                           ),
                                           child: ClipOval(
                                             child: Image.network(
-                                              business.logo,
+                                              business.logo ?? '',
                                               fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return Container(
+                                                  color: GColors.primary,
+                                                  child: Center(
+                                                    child: Text(
+                                                      business.name.isNotEmpty
+                                                          ? business.name[0]
+                                                          : '?',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
@@ -227,7 +261,7 @@ class BusinessListView extends GetView<BusinessListController> {
                                                     BorderRadius.circular(4),
                                               ),
                                               child: Text(
-                                                business.subCategory,
+                                                subCategory,
                                                 style: Poppins.medium.copyWith(
                                                   fontSize: 10,
                                                   color: GColors.primary,

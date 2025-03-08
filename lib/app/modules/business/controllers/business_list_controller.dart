@@ -6,7 +6,7 @@ import '../data/models/business_model.dart';
 
 class BusinessListController extends GetxController {
   final isLoading = true.obs;
-  final businesses = <BusinessModel>[].obs;
+  final businesses = <Business>[].obs;
 
   @override
   void onInit() {
@@ -24,30 +24,24 @@ class BusinessListController extends GetxController {
       // Get category and subcategory from arguments
       final category = Get.arguments['category'] as String;
       final subCategory = Get.arguments['subCategory'] as String;
+      final subCategoryId = Get.arguments['subCategoryId'] as String? ?? '';
 
-      // Create dummy data
+      // Create dummy data using the new Business model
       businesses.value = List.generate(
         10,
-        (index) => BusinessModel(
+        (index) => Business(
           id: 'business-$index',
           name: 'Business ${index + 1}',
-          category: category,
-          subCategory: subCategory,
           description:
               'This is a great business offering quality products and services to our customers. We pride ourselves on excellent customer service.',
           address: '123 Main St, City, State',
-          phone: '+1 234 567 8900',
           email: 'business${index + 1}@example.com',
-          ownerName: 'John Doe',
+          image: 'https://picsum.photos/seed/business$index/800/400',
           logo:
               'https://ui-avatars.com/api/?name=Business+${index + 1}&background=random',
-          banner: 'https://picsum.photos/seed/business$index/800/400',
-          images: List.generate(
-            5,
-            (imgIndex) =>
-                'https://picsum.photos/seed/business$index-$imgIndex/800/600',
-          ),
-          operatingHours: {
+          subCategoryId: subCategoryId,
+          phone: '+1 234 567 8900',
+          hours: {
             'Monday': {'open': '9:00 AM', 'close': '5:00 PM'},
             'Tuesday': {'open': '9:00 AM', 'close': '5:00 PM'},
             'Wednesday': {'open': '9:00 AM', 'close': '5:00 PM'},
@@ -56,7 +50,19 @@ class BusinessListController extends GetxController {
             'Saturday': {'open': '10:00 AM', 'close': '3:00 PM'},
             'Sunday': {'open': 'Closed', 'close': 'Closed'},
           },
-          reviewCount: 10 + index * 5,
+          ownerName: 'John Doe',
+          isApproved: true,
+          images: List.generate(
+            5,
+            (imgIndex) =>
+                'https://picsum.photos/seed/business$index-$imgIndex/800/600',
+          ),
+          videos: [],
+          uploaderId: 'dummy-user-id',
+          website: 'https://example.com',
+          facebook: 'https://facebook.com/business${index + 1}',
+          instagram: 'business${index + 1}',
+          twitter: '@business${index + 1}',
         ),
       );
     } catch (e) {

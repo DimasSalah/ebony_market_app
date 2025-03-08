@@ -1,17 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import '../../../../core/constant/constant.dart';
 import '../../../../core/utils/extension/sizedbox_extension.dart';
-import '../../controllers/business_detail_controller.dart';
 import '../../data/models/business_model.dart';
+import '../../controllers/business_detail_controller.dart';
 
 class BusinessDetailView extends GetView<BusinessDetailController> {
   const BusinessDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final business = Get.arguments as BusinessModel;
+    final business = Get.arguments as Business;
+    final subCategoryName = Get.arguments is Map
+        ? Get.arguments['subCategoryName'] as String? ?? ''
+        : controller.subCategoryName.value;
 
     return Scaffold(
       body: CustomScrollView(
@@ -56,9 +60,22 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                 fit: StackFit.expand,
                 children: [
                   // Banner Image
-                  Image.network(
-                    business.banner,
+                  CachedNetworkImage(
+                    imageUrl: business.image ?? '',
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: GColors.greyContainer,
+                      child: Center(
+                        child: HeroIcon(
+                          HeroIcons.photo,
+                          color: GColors.textSecondary,
+                          size: 64,
+                        ),
+                      ),
+                    ),
                   ),
                   // Gradient overlay
                   Container(
@@ -95,10 +112,44 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                             ],
                           ),
                           child: ClipOval(
-                            child: Image.network(
-                              business.logo,
-                              fit: BoxFit.cover,
-                            ),
+                            child: business.logo != null &&
+                                    business.logo!.isNotEmpty
+                                ? Image.network(
+                                    business.logo!,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        color: GColors.primary,
+                                        child: Center(
+                                          child: Text(
+                                            business.name.isNotEmpty
+                                                ? business.name[0]
+                                                : '?',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 24,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Container(
+                                    color: GColors.primary,
+                                    child: Center(
+                                      child: Text(
+                                        business.name.isNotEmpty
+                                            ? business.name[0]
+                                            : '?',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ),
                         16.s,
@@ -112,27 +163,28 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                                 color: Colors.white,
                               ),
                             ),
-                            Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(
-                                    business.subCategory,
-                                    style: Poppins.medium.copyWith(
-                                      fontSize: 10,
-                                      color: Colors.white,
+                            if (subCategoryName.isNotEmpty)
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      subCategoryName,
+                                      style: Poppins.medium.copyWith(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
                           ],
                         ),
                       ],
@@ -193,36 +245,95 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                   24.s,
 
                   // Photos Section
-                  Text(
-                    'Photos',
-                    style: Poppins.semiBold.copyWith(fontSize: 18),
-                  ),
-                  12.s,
-                  Container(
-                    height: 120,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: business.images.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () =>
-                              controller.viewImage(business.images, index),
-                          child: Container(
-                            width: 120,
-                            margin: EdgeInsets.only(right: 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              image: DecorationImage(
-                                image: NetworkImage(business.images[index]),
-                                fit: BoxFit.cover,
+                  if (business.images.isNotEmpty) ...[
+                    Text(
+                      'Photos',
+                      style: Poppins.semiBold.copyWith(fontSize: 18),
+                    ),
+                    12.s,
+                    Container(
+                      height: 120,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: business.images.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () =>
+                                controller.viewImage(business.images, index),
+                            child: Container(
+                              width: 120,
+                              margin: EdgeInsets.only(right: 8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: CachedNetworkImage(
+                                  imageUrl: business.images[index],
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => Container(
+                                    color: GColors.greyContainer,
+                                    child: Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                    color: GColors.greyContainer,
+                                    child: Center(
+                                      child: HeroIcon(
+                                        HeroIcons.photo,
+                                        color: GColors.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  24.s,
+                    24.s,
+                  ],
+
+                  // Social Media Section
+                  if (business.website != null ||
+                      business.facebook != null ||
+                      business.instagram != null ||
+                      business.twitter != null) ...[
+                    Text(
+                      'Social Media',
+                      style: Poppins.semiBold.copyWith(fontSize: 18),
+                    ),
+                    12.s,
+                    if (business.website != null)
+                      _buildContactItem(
+                        icon: HeroIcons.globeAlt,
+                        title: 'Website',
+                        value: business.website!,
+                      ),
+                    if (business.facebook != null)
+                      _buildContactItem(
+                        icon: HeroIcons.link,
+                        title: 'Facebook',
+                        value: business.facebook!,
+                      ),
+                    if (business.instagram != null)
+                      _buildContactItem(
+                        icon: HeroIcons.camera,
+                        title: 'Instagram',
+                        value: business.instagram!,
+                      ),
+                    if (business.twitter != null)
+                      _buildContactItem(
+                        icon: HeroIcons.chatBubbleBottomCenterText,
+                        title: 'Twitter',
+                        value: business.twitter!,
+                      ),
+                    24.s,
+                  ],
 
                   // Contact Info Section
                   Text(
@@ -230,21 +341,23 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                     style: Poppins.semiBold.copyWith(fontSize: 18),
                   ),
                   12.s,
-                  _buildContactItem(
-                    icon: HeroIcons.user,
-                    title: 'Owner',
-                    value: business.ownerName,
-                  ),
-                  _buildContactItem(
-                    icon: HeroIcons.phone,
-                    title: 'Phone',
-                    value: business.phone,
-                  ),
-                  _buildContactItem(
-                    icon: HeroIcons.envelope,
-                    title: 'Email',
-                    value: business.email,
-                  ),
+                  if (business.ownerName != null)
+                    _buildContactItem(
+                      icon: HeroIcons.user,
+                      title: 'Owner',
+                      value: business.ownerName!,
+                    ),
+                  // if (business.phone != null)
+                  //   _buildContactItem(
+                  //     icon: HeroIcons.phone,
+                  //     title: 'Phone',
+                  //     value: business.phone!,
+                  //   ),
+                  // _buildContactItem(
+                  //   icon: HeroIcons.envelope,
+                  //   title: 'Email',
+                  //   value: business.email,
+                  // ),
                   _buildContactItem(
                     icon: HeroIcons.mapPin,
                     title: 'Address',
@@ -253,39 +366,44 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                   24.s,
 
                   // Operating Hours Section
-                  Text(
-                    'Operating Hours',
-                    style: Poppins.semiBold.copyWith(fontSize: 18),
-                  ),
-                  12.s,
-                  ...business.operatingHours.entries.map((entry) {
-                    final day = entry.key;
-                    final hours = entry.value;
-                    final isOpen = hours['open'] != 'Closed';
+                  if (business.hours != null) ...[
+                    Text(
+                      'Operating Hours',
+                      style: Poppins.semiBold.copyWith(fontSize: 18),
+                    ),
+                    12.s,
+                    ...controller
+                        .getFormattedHours(business.hours)
+                        .entries
+                        .map((entry) {
+                      final day = entry.key;
+                      final hours = entry.value;
+                      final isOpen = hours['open'] != 'Closed';
 
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            child: Text(
-                              day,
-                              style: Poppins.medium,
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              child: Text(
+                                day,
+                                style: Poppins.medium,
+                              ),
                             ),
-                          ),
-                          Text(
-                            isOpen
-                                ? '${hours['open']} - ${hours['close']}'
-                                : 'Closed',
-                            style: Poppins.regular.copyWith(
-                              color: GColors.textSecondary,
+                            Text(
+                              isOpen
+                                  ? '${hours['open']} - ${hours['close']}'
+                                  : 'Closed',
+                              style: Poppins.regular.copyWith(
+                                color: GColors.textSecondary,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+                          ],
+                        ),
+                      );
+                    }),
+                  ],
                   // Reviews Section
                 ],
               ),
@@ -328,23 +446,26 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
     required String title,
     required String value,
   }) {
-    return Row(
-      children: [
-        HeroIcon(
-          icon,
-          size: 14,
-          color: GColors.textSecondary,
-        ),
-        8.s,
-        Expanded(
-          child: Text(
-            '$title: $value',
-            style: Poppins.regular.copyWith(
-              color: GColors.textSecondary,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          HeroIcon(
+            icon,
+            size: 14,
+            color: GColors.textSecondary,
+          ),
+          8.s,
+          Expanded(
+            child: Text(
+              '$title: $value',
+              style: Poppins.regular.copyWith(
+                color: GColors.textSecondary,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
