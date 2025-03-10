@@ -1,3 +1,4 @@
+import 'package:ebony_market_app/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chewie/chewie.dart';
@@ -24,7 +25,7 @@ class LoginController extends GetxController {
   Future<void> login() async {
     try {
       // TODO: Implement login logic
-      Get.offAllNamed('/home');
+      Get.offAllNamed(Routes.BOTTOMBAR);
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -48,8 +49,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> initializePlayer() async {
-    videoPlayerController =
-        VideoPlayerController.asset('');
+    videoPlayerController = VideoPlayerController.asset('');
     await videoPlayerController.initialize();
 
     chewieController = ChewieController(

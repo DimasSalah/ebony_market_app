@@ -15,7 +15,7 @@ class HomeCarousel extends StatelessWidget {
     return Column(
       children: [
         CarouselSlider.builder(
-          itemCount: controller.banners.length,
+          itemCount: controller.promotions.length,
           options: CarouselOptions(
             height: 150,
             aspectRatio: 16 / 9,
@@ -27,6 +27,7 @@ class HomeCarousel extends StatelessWidget {
             },
           ),
           itemBuilder: (context, index, realIndex) {
+            final promotion = controller.promotions[index];
             return GestureDetector(
               onLongPress: () {
                 Get.dialog(
@@ -36,7 +37,7 @@ class HomeCarousel extends StatelessWidget {
                       minScale: 0.5,
                       maxScale: 4.0,
                       child: Image.asset(
-                        controller.banners[index],
+                        promotion.imageUrl,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -49,7 +50,7 @@ class HomeCarousel extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    controller.banners[index],
+                    promotion.imageUrl,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -62,7 +63,7 @@ class HomeCarousel extends StatelessWidget {
           () => Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
-              controller.banners.length,
+              controller.promotions.length,
               (index) => Container(
                 width: 30,
                 height: 8,

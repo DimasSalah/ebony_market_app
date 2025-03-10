@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import '../data/models/category_model.dart';
+import '../data/models/promotion_model.dart';
 
 import '../../../core/utils/resources/resources.dart';
 
@@ -14,11 +15,18 @@ class HomeController extends GetxController {
   final currentBannerIndex = 0.obs;
 
   final categories = <Category>[].obs;
+  RxList<Promotion> promotions = <Promotion>[].obs;
+
+  Map<String, String> categoryIcons = {
+    'Restaurants': Images.banner1,
+    'Retail': Images.banner2,
+  };
 
   @override
   void onInit() {
     super.onInit();
     loadCategories();
+    loadPromotions();
   }
 
   @override
@@ -34,6 +42,29 @@ class HomeController extends GetxController {
       print('Error loading categories: $e');
     }
   }
+
+// load promotions banner
+  Future<void> loadPromotions() async {
+    try {
+      promotions.value = getDummyPromotions();
+      update(['promotions']);
+    } catch (e) {
+      print('Error loading promotions: $e');
+    }
+  }
+
+  List<Promotion> getDummyPromotions() {
+    return [
+      Promotion(
+       imageUrl:  Images.banner1,
+     ),
+     Promotion(
+       imageUrl: Images.banner2,
+     ),
+   ];
+ }
+
+ ////////////////////////////
 
   HeroIcons getCategoryIcon(String categoryName) {
     final Map<String, HeroIcons> categoryIcons = {
