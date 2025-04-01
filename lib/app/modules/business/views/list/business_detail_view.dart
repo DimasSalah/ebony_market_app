@@ -216,11 +216,11 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                         label: 'Directions',
                         onTap: () => controller.getDirections(business.address),
                       ),
-                      _buildQuickAction(
-                        icon: HeroIcons.envelope,
-                        label: 'Email',
-                        onTap: () => controller.emailBusiness(business.email),
-                      ),
+                      // _buildQuickAction(
+                      //   icon: HeroIcons.envelope,
+                      //   label: 'Email',
+                      //   onTap: () => controller.emailBusiness(business.email),
+                      // ),
                       _buildQuickAction(
                         icon: HeroIcons.chatBubbleLeftRight,
                         label: 'Message',
@@ -229,6 +229,7 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                     ],
                   ),
                   24.s,
+                  // Reviews Section
 
                   // About Section
                   Text(
@@ -244,6 +245,79 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                   ),
                   24.s,
 
+                  Text(
+                    'Reviews & Ratings',
+                    style: Poppins.semiBold.copyWith(fontSize: 18),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.dialog(
+                        AlertDialog(
+                          title: Text(
+                            'Coming Soon!',
+                            style: Poppins.semiBold.copyWith(
+                              fontSize: 18,
+                            ),
+                          ),
+                          content: Text(
+                            'Review and rating feature will be available soon.',
+                            style: Poppins.regular.copyWith(
+                              color: GColors.textSecondary,
+                              fontSize: 16,
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              child: Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: GColors.greyContainer),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              ...List.generate(
+                                5,
+                                (index) => Padding(
+                                  padding: EdgeInsets.only(right: 4),
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 24,
+                                  ),
+                                ),
+                              ),
+                              8.s,
+                              Text(
+                                '(0 reviews)',
+                                style: Poppins.regular.copyWith(
+                                  color: GColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                          12.s,
+                          Text(
+                            'Tap to add your review',
+                            style: Poppins.medium.copyWith(
+                              color: GColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  24.s,
+
                   // Photos Section
                   if (business.images.isNotEmpty) ...[
                     Text(
@@ -251,7 +325,7 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                       style: Poppins.semiBold.copyWith(fontSize: 18),
                     ),
                     12.s,
-                    Container(
+                    SizedBox(
                       height: 120,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -342,27 +416,27 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                   ),
                   12.s,
                   if (business.ownerName != null)
+                    // _buildContactItem(
+                    //   icon: HeroIcons.user,
+                    //   title: 'Owner',
+                    //   value: business.ownerName!,
+                    // ),
+                    // if (business.phone != null)
+                    //   _buildContactItem(
+                    //     icon: HeroIcons.phone,
+                    //     title: 'Phone',
+                    //     value: business.phone!,
+                    //   ),
+                    // _buildContactItem(
+                    //   icon: HeroIcons.envelope,
+                    //   title: 'Email',
+                    //   value: business.email,
+                    // ),
                     _buildContactItem(
-                      icon: HeroIcons.user,
-                      title: 'Owner',
-                      value: business.ownerName!,
+                      icon: HeroIcons.mapPin,
+                      title: 'Address',
+                      value: business.address,
                     ),
-                  // if (business.phone != null)
-                  //   _buildContactItem(
-                  //     icon: HeroIcons.phone,
-                  //     title: 'Phone',
-                  //     value: business.phone!,
-                  //   ),
-                  // _buildContactItem(
-                  //   icon: HeroIcons.envelope,
-                  //   title: 'Email',
-                  //   value: business.email,
-                  // ),
-                  _buildContactItem(
-                    icon: HeroIcons.mapPin,
-                    title: 'Address',
-                    value: business.address,
-                  ),
                   24.s,
 
                   // Operating Hours Section
@@ -404,7 +478,7 @@ class BusinessDetailView extends GetView<BusinessDetailController> {
                       );
                     }),
                   ],
-                  // Reviews Section
+                  24.s,
                 ],
               ),
             ),

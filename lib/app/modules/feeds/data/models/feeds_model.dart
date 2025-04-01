@@ -58,3 +58,27 @@ class FeedsModel {
     };
   }
 }
+
+class Feed {
+  final String id;
+  final String userName;
+  final String? userImage;
+  final String? content;
+  final String? image;
+  final String timeAgo;
+  final int likes;
+  final int comments;
+  final bool isLiked;
+
+  Feed({
+    required this.id,
+    required this.userName,
+    this.userImage,
+    this.content,
+    this.image,
+    required this.timeAgo,
+    required this.likes,
+    required this.comments,
+    this.isLiked = false,
+  });
+}

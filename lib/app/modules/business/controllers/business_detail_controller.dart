@@ -12,7 +12,7 @@ class BusinessDetailController extends GetxController {
     super.onInit();
     // Check if business is in favorites
     checkFavorite();
-  
+
     // Get subcategory name from arguments if available
     if (Get.arguments is Map && Get.arguments['subCategoryName'] != null) {
       subCategoryName.value = Get.arguments['subCategoryName'];
@@ -108,16 +108,55 @@ class BusinessDetailController extends GetxController {
   }
 
   void viewImage(List<String> images, int index) {
-    // TODO: Implement image viewer
     Get.dialog(
       Dialog(
         insetPadding: EdgeInsets.zero,
         child: Container(
+          height: Get.height * 0.5,
           width: double.infinity,
-          height: Get.height * 0.7,
-          child: Image.network(
-            images[index],
-            fit: BoxFit.contain,
+          child: PageView.builder(
+            controller: PageController(initialPage: index),
+            itemCount: images.length,
+            itemBuilder: (context, pageIndex) => Stack(
+              children: [
+                // Image
+                InteractiveViewer(
+                  child: Image.network(
+                    images[pageIndex],
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                // Close button
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: IconButton(
+                    icon: Icon(Icons.close, color: Colors.white),
+                    onPressed: () => Get.back(),
+                  ),
+                ),
+                // Image counter
+                Positioned(
+                  bottom: 16,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Text(
+                        '${pageIndex + 1}/${images.length}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

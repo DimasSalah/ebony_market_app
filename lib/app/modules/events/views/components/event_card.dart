@@ -120,6 +120,21 @@ class EventCard extends StatelessWidget {
                 ),
               ],
             ),
+            3.s,
+            //distance
+            Row(
+              children: [
+                HeroIcon(HeroIcons.arrowRight, color: GColors.grey, size: 20),
+                5.s,
+                Text(
+                  '${event.distance} km',
+                  style: Poppins.medium.copyWith(
+                    fontSize: Tz.small,
+                    color: GColors.grey,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

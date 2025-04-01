@@ -7,6 +7,7 @@ import '../../../../core/constant/constant.dart';
 import '../../../../core/utils/helper/date_picker.dart';
 import '../../../../core/utils/widgets/buttons/button_primary.dart';
 import '../../../../core/utils/widgets/cards/card_app.dart';
+import '../../../../core/utils/widgets/textfields/dropdown_input_primary.dart';
 import '../../../../core/utils/widgets/textfields/input_primary.dart';
 import '../../controllers/events_controller.dart';
 
@@ -27,6 +28,33 @@ class EventForm extends StatelessWidget {
             'Event',
             style: Poppins.regular.copyWith(fontSize: 16),
           ),
+          10.s,
+          Text(
+            'Category',
+            style: Poppins.regular.copyWith(fontSize: Tz.small),
+          ),
+          5.s,
+          Obx(() => DropdownInputPrimary(
+                borderRadius: 10,
+                hint: 'Select event category',
+                hintStyle: Poppins.regular.copyWith(fontSize: 10),
+                textStyle: Poppins.regular.copyWith(fontSize: 10),
+                value: controller.selectedCategory.value,
+                items: controller.eventCategories.map((category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(
+                      category,
+                      style: Poppins.regular.copyWith(fontSize: Tz.small),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  controller.selectedCategory.value = value;
+                },
+                isDense: true,
+                outlineColor: GColors.borderPrimary,
+              )),
           10.s,
           Text(
             'Image event',

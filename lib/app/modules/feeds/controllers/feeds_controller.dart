@@ -53,7 +53,9 @@ class FeedsController extends GetxController {
           id: 'feed-$index',
           caption:
               'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-          imageUrl: 'https://picsum.photos/seed/feed$index/800/450',
+          imageUrl: index % 2 == 0
+              ? null
+              : 'https://picsum.photos/seed/feed$index/800/450',
           uid: 'user-1',
           commentIds: ['comment-1', 'comment-2', 'comment-3'],
           uploadTime: Timestamp.now(),

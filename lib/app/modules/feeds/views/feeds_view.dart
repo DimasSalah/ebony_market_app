@@ -26,62 +26,109 @@ class FeedsView extends GetView<FeedsController> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: CachedNetworkImageProvider(
-                          'https://img.freepik.com/free-photo/medium-shot-man-posing-outside_23-2149028795.jpg?t=st=1740988628~exp=1740992228~hmac=a7877e41047e07be9e276337df08b09d3c002b07632819f10c43afb750d36364&w=1060',
-                        ),
+      body: CustomScrollView(
+        slivers: [
+          // Sticky Header
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _StickyHeaderDelegate(
+              child: Container(
+                color: GColors.backgroundColor,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: CachedNetworkImageProvider(
+                                  'https://img.freepik.com/free-photo/medium-shot-man-posing-outside_23-2149028795.jpg?t=st=1740988628~exp=1740992228~hmac=a7877e41047e07be9e276337df08b09d3c002b07632819f10c43afb750d36364&w=1060',
+                                ),
+                              ),
+                            ),
+                          ),
+                          15.s,
+                          Text(
+                            'What on your mind?',
+                            style: Poppins.medium.copyWith(
+                              fontSize: Tz.medium,
+                              color: GColors.textSecondary,
+                            ),
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () => Get.to(() => FeedsUploadView()),
+                            child: HeroIcon(
+                              HeroIcons.plus,
+                              size: 26,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  15.s,
-                  Text(
-                    'What on your mind?',
-                    style: Poppins.medium.copyWith(
-                        fontSize: Tz.medium, color: GColors.textSecondary),
-                  ),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: () => Get.to(() => FeedsUploadView()),
-                    child: HeroIcon(
-                      HeroIcons.plus,
-                      size: 26,
+                    Divider(
+                      color: GColors.borderSecondary,
+                      thickness: 3,
+                      height: 1,
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
-            Divider(
-              color: GColors.borderSecondary,
-              thickness: 3,
+          ),
+
+          // Feeds Content
+          SliverPadding(
+            padding: EdgeInsets.only(top: 10),
+            sliver: Obx(
+              () => controller.isLoading.value
+                  ? SliverFillRemaining(
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final feed = controller.feeds[index];
+                          return FeedsCard(feed: feed);
+                        },
+                        childCount: controller.feeds.length,
+                      ),
+                    ),
             ),
-            10.s,
-            Obx(() => controller.isLoading.value
-                ? Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: controller.feeds.length,
-                    itemBuilder: (context, index) {
-                      final feed = controller.feeds[index];
-                      return FeedsCard(feed: feed);
-                    },
-                  )),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+}
+
+class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+
+  _StickyHeaderDelegate({required this.child});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  double get maxExtent => 70; // Sesuaikan dengan tinggi yang diinginkan
+
+  @override
+  double get minExtent =>
+      70; // Biasanya sama dengan maxExtent untuk header yang tidak berubah ukuran
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

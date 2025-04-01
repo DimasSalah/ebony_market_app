@@ -39,6 +39,36 @@ class EventsController extends GetxController {
   double get averagePrice =>
       (currentStartPrice.value + currentEndPrice.value) / 2;
 
+  final selectedCategory = Rxn<String>();
+
+  final List<String> eventCategories = [
+    'Afro beats event',
+    'Reggae dancehall',
+    'Soca and Calypso',
+    'Hip hop and rap',
+    'R&B and soul',
+    'Parties',
+    'Festivals & cultural events',
+    'Business & Networking',
+    'Church & religious',
+    'Fundraising Events',
+    'Sports Events',
+    'Comedy Events',
+    'Carnival',
+    'Boat parties',
+  ];
+
+  final searchController = TextEditingController();
+  final selectedCategories = <String>[].obs;
+  final filteredEvents = <EventModel>[].obs;
+  final searchQuery = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    filteredEvents.value = eventsDummy;
+  }
+
   void toggleEventForm() {
     isShowEventForm.value = !isShowEventForm.value;
   }
@@ -52,6 +82,8 @@ class EventsController extends GetxController {
       price: '50.00',
       description:
           'Coldplay is a British rock band that was formed in 1996 in London. The band consists of four members: Chris Martin, Jonny Buckland, Guy Berryman, and Will Champion. The band is known for its unique blend of rock, pop, and electronic music.',
+      distance: 14.0,
+      category: 'Festivals & cultural events',
     ),
     EventModel(
       image: Images.dummyEvent2,
@@ -61,6 +93,8 @@ class EventsController extends GetxController {
       price: '10.00',
       description:
           'Carnival in the park is a popular event that takes place in Rio de Janeiro, Brazil. The event is known for its unique blend of music, dance, and food.',
+      distance: 11.0,
+      category: 'Carnival',
     ),
     EventModel(
       image: Images.dummyEvent3,
@@ -70,6 +104,8 @@ class EventsController extends GetxController {
       price: '35.00',
       description:
           'Music Festival Dj Mix is a popular event that takes place in Edmonton, Canada. The event is known for its unique blend of music, dance, and food.',
+      distance: 18.0,
+      category: 'Parties',
     ),
   ];
 
@@ -142,5 +178,40 @@ class EventsController extends GetxController {
   void updatePriceRange(RangeValues values) {
     currentStartPrice.value = values.start;
     currentEndPrice.value = values.end;
+  }
+
+  void searchEvents(String query) {
+    searchQuery.value = query;
+    applyFilters();
+  }
+
+  void addCategory(String category) {
+    if (!selectedCategories.contains(category)) {
+      selectedCategories.add(category);
+    }
+  }
+
+  void removeCategory(String category) {
+    selectedCategories.remove(category);
+    applyFilters();
+  }
+
+  void clearFilters() {
+    selectedCategories.clear();
+    searchController.clear();
+    searchQuery.value = '';
+    filteredEvents.value = eventsDummy;
+  }
+
+  void applyFilters() {
+    filteredEvents.value = eventsDummy.where((event) {
+      bool matchesSearch = searchQuery.value.isEmpty ||
+          event.name.toLowerCase().contains(searchQuery.value.toLowerCase());
+
+      bool matchesCategories = selectedCategories.isEmpty ||
+          selectedCategories.contains(event.category);
+
+      return matchesSearch && matchesCategories;
+    }).toList();
   }
 }

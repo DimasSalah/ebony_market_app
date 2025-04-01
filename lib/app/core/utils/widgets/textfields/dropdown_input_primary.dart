@@ -216,7 +216,7 @@ class _DropdownInputPrimary extends State<DropdownInputPrimary> {
               hintStyle: widget.hintStyle ??
                   Poppins.regular.copyWith(
                     color: widget.hintColor,
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
               errorMaxLines: 2,
               errorStyle: widget.errorTextStyle,

@@ -5,6 +5,8 @@ class EventModel {
   final String location;
   final String price;
   final String? description;
+  final double distance;
+  final String category;
 
   EventModel(
       {required this.image,
@@ -12,5 +14,7 @@ class EventModel {
       required this.date,
       required this.location,
       required this.price,
-       this.description});
+      required this.distance,
+      required this.category,
+      this.description});
 }

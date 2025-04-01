@@ -1,0 +1,2 @@
+/Users/mymac/development/project/ebony_market_app/android/app/.cxx/RelWithDebInfo/6n4w5m50/x86/CMakeFiles/edit_cache.dir
+/Users/mymac/development/project/ebony_market_app/android/app/.cxx/RelWithDebInfo/6n4w5m50/x86/CMakeFiles/rebuild_cache.dir

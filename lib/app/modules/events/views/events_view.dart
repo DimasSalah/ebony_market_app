@@ -74,31 +74,166 @@ class EventsView extends GetView<EventsController> {
                 style: Poppins.semiBold.copyWith(fontSize: 18),
               ),
               10.s,
-              InputPrimary(
-                hint: 'Search event',
-                suffixIcon: HeroIcon(
-                  HeroIcons.magnifyingGlass,
-                  color: GColors.grey,
-                  size: 20,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InputPrimary(
+                          controller: controller.searchController,
+                          hint: 'Search event',
+                          suffixIcon: HeroIcon(
+                            HeroIcons.magnifyingGlass,
+                            color: GColors.grey,
+                            size: 20,
+                          ),
+                          onChanged: (value) => controller.searchEvents(value),
+                        ),
+                      ),
+                      8.s,
+                      InkWell(
+                        onTap: () => _showFilterBottomSheet(context),
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: GColors.primary,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: HeroIcon(
+                            HeroIcons.adjustmentsHorizontal,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  10.s,
+                  Obx(() => Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: controller.selectedCategories
+                            .map((category) => FilterChip(
+                                  onSelected: (selected) {
+                                    if (selected) {
+                                      controller.addCategory(category);
+                                    } else {
+                                      controller.removeCategory(category);
+                                    }
+                                  },
+                                  label: Text(
+                                    category,
+                                    style: Poppins.medium.copyWith(
+                                      fontSize: 12,
+                                      color: GColors.primary,
+                                    ),
+                                  ),
+                                  backgroundColor:
+                                      GColors.primary.withOpacity(0.1),
+                                  onDeleted: () =>
+                                      controller.removeCategory(category),
+                                  deleteIconColor: GColors.primary,
+                                ))
+                            .toList(),
+                      )),
+                ],
               ),
               20.s,
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.eventsDummy.length,
-                itemBuilder: (context, index) => EventCard(
-                  event: controller.eventsDummy[index],
-                  onTap: () {
-                    controller.setSelectedEvent(controller.eventsDummy[index]);
-                    Get.toNamed(Routes.EVENT_DETAILS);
-                  },
-                ),
-              )
+              Obx(() => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.filteredEvents.length,
+                    itemBuilder: (context, index) => EventCard(
+                      event: controller.filteredEvents[index],
+                      onTap: () {
+                        controller
+                            .setSelectedEvent(controller.filteredEvents[index]);
+                        Get.toNamed(Routes.EVENT_DETAILS);
+                      },
+                    ),
+                  )),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void _showFilterBottomSheet(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Filter Events',
+                  style: Poppins.semiBold.copyWith(fontSize: 18),
+                ),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: HeroIcon(HeroIcons.xMark),
+                ),
+              ],
+            ),
+            10.s,
+            Text(
+              'Categories',
+              style: Poppins.medium.copyWith(fontSize: 16),
+            ),
+            10.s,
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: controller.eventCategories.map((category) {
+                return Obx(() => FilterChip(
+                      selected:
+                          controller.selectedCategories.contains(category),
+                      label: Text(category),
+                      onSelected: (selected) {
+                        if (selected) {
+                          controller.addCategory(category);
+                        } else {
+                          controller.removeCategory(category);
+                        }
+                      },
+                      selectedColor: GColors.primary.withOpacity(0.2),
+                      checkmarkColor: GColors.primary,
+                    ));
+              }).toList(),
+            ),
+            16.s,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => controller.clearFilters(),
+                  child: Text('Clear All'),
+                ),
+                16.s,
+                ElevatedButton(
+                  onPressed: () {
+                    controller.applyFilters();
+                    Get.back();
+                  },
+                  child: Text('Apply'),
+                ),
+              ],
+            ),
+            SizedBox(height: MediaQuery.of(context).padding.bottom),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
     );
   }
 }
